@@ -2,13 +2,16 @@
 Env: DATA_DIR (default data), TRUST_PROXY=1 behind a proxy, TURNSTILE_SITE_KEY / TURNSTILE_SECRET (optional CAPTCHA)."""
 import collections, io, json, os, pathlib, re, threading, time
 from flask import Flask, jsonify, request, send_file, abort, Response
-from common import Source, sha256, student_image, images_to_pdf, S, tight, general_with_student
+from common import Source, sha256, student_image, images_to_pdf, S, tight, build_base, general_pdf
 
 BASE = pathlib.Path(__file__).resolve().parent
 app = Flask(__name__, static_folder=None)
 DATA = pathlib.Path(os.environ.get('DATA_DIR', BASE / 'data'))
 LOCK = threading.Lock()          # pdfium is not thread-safe
-HEAVY = threading.Semaphore(1)   # one full-document PDF build at a time (keeps RAM under the 512 MB free-plan limit)
+BASE_LOCK = threading.Lock()
+PDFGEN = threading.Semaphore(2)    # at most 2 PDF builds at once (each briefly uses ~40 MB)
+CELLS = collections.OrderedDict()   # small server-side LRU of student crops (bytes), so bursts of visits are cheap
+CELL_MAX = 400
 COURSE_CACHE = {}                # course-name images are identical for everyone: render once
 NOTFOUND = 'لم يتم العثور على نتيجة لهذا الرقم الجامعي.'
 DIGITS = str.maketrans('٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹', '01234567890123456789')
@@ -80,6 +83,10 @@ for key, g in GROUPS.items():
 
 # ---------- abuse protection ----------
 REQ, DLQ, FAIL = (collections.defaultdict(collections.deque) for _ in range(3))
+# Campus Wi-Fi / mobile carriers put MANY students behind ONE public IP, so these are generous and configurable.
+RATE_REQ = int(os.environ.get('RATE_REQ', 300))     # lookups per IP per 10 min
+RATE_DL = int(os.environ.get('RATE_DL', 1500))      # image/PDF requests per IP per 10 min
+FAIL_MAX = int(os.environ.get('FAIL_MAX', 40))      # unknown IDs per IP per 15 min before a temporary block
 
 
 def ip():
@@ -102,7 +109,7 @@ def blocked(key):   # many unknown IDs in a row => someone is enumerating
     now, q = time.time(), FAIL[key]
     while q and q[0] < now - 900:
         q.popleft()
-    return len(q) >= 10
+    return len(q) >= FAIL_MAX
 
 
 def captcha_ok(token, addr):
@@ -177,7 +184,7 @@ def config():
 @app.post('/api/result')
 def api_result():
     a = ip()
-    if blocked(a) or not hit(REQ, a, 40, 600):
+    if blocked(a) or not hit(REQ, a, RATE_REQ, 600):
         return jsonify(error='محاولات كثيرة. حاول مرة أخرى بعد قليل.'), 429
     body = request.get_json(silent=True) or {}
     if not captcha_ok(body.get('cf'), a):
@@ -210,7 +217,7 @@ def png(im):
 
 def guard(ds, sid):
     a = ip()
-    if blocked(a) or not hit(DLQ, a, 120, 600):
+    if blocked(a) or not hit(DLQ, a, RATE_DL, 600):
         abort(429)
     d = DS.get(ds)
     if not d or sid not in d['j']['students']:
@@ -233,14 +240,21 @@ def cell(ds, kind, key):
         return send_file(io.BytesIO(COURSE_CACHE[k]), mimetype='image/png')
     d = guard(ds, key)
     rec = d['j']['students'][key]
-    with LOCK:
-        if kind == 'name' and rec.get('name_box'):
-            return png(tight(d['src'].clip(rec['name_box']['page'], rec['name_box']['bbox'], pad=0, scale=4)))
-        if kind == 'note' and rec.get('note_box'):
-            return png(tight(d['src'].clip(rec['note_box']['page'], rec['note_box']['bbox'], pad=0, scale=4)))
-        if kind == 'row':
-            return png(student_image(d['src'], d['j']['header'], rec, '', scale=3))
-    abort(404)
+    ck = (ds, kind, key)
+    if ck not in CELLS:
+        with LOCK:
+            if kind == 'name' and rec.get('name_box'):
+                im = tight(d['src'].clip(rec['name_box']['page'], rec['name_box']['bbox'], pad=0, scale=4))
+            elif kind == 'note' and rec.get('note_box'):
+                im = tight(d['src'].clip(rec['note_box']['page'], rec['note_box']['bbox'], pad=0, scale=4))
+            elif kind == 'row':
+                im = student_image(d['src'], d['j']['header'], rec, '', scale=3)
+            else:
+                abort(404)
+            CELLS[ck] = to_bytes(im)
+        while len(CELLS) > CELL_MAX:
+            CELLS.popitem(last=False)
+    return send_file(io.BytesIO(CELLS[ck]), mimetype='image/png')
 
 
 @app.get('/dl/<ds>/<sid>/<kind>')
@@ -248,18 +262,24 @@ def download(ds, sid, kind):
     d = guard(ds, sid)
     j = d['j']
     if kind == 'general.pdf':
-        with HEAVY:
-            with LOCK:
-                ims = general_with_student(d['src'], j['masks'], j['students'][sid], scale=2)
-            b = io.BytesIO(); images_to_pdf(ims, 2, b); b.seek(0)
-            del ims
+        rec = j['students'][sid]
+        with BASE_LOCK:
+            if 'base' not in d:
+                with LOCK:
+                    d['base'] = build_base(d['src'], j['masks'])
+        with LOCK:
+            row = d['src'].clip(rec['page'], rec['bbox'], pad=0.5, scale=3)
+        with PDFGEN:
+            b = io.BytesIO(); general_pdf(d['base'], j['masks'], rec, row, b); b.seek(0)
         return send_file(b, mimetype='application/pdf', as_attachment=True, download_name=f'{ds}_{sid}_stamps.pdf')
     if kind == 'student.pdf':
         rec = j['students'][sid]
         foot = f'Source: {j["meta"]["source_pdf"]} | page {rec["page"] + 1} | SHA-256 {j["meta"]["sha256"]}'
         with LOCK:
             im = student_image(d['src'], j['header'], rec, foot)
-        b = io.BytesIO(); images_to_pdf([im], S, b); b.seek(0)
+        with PDFGEN:
+            b = io.BytesIO(); images_to_pdf([im], S, b); b.seek(0)
+        del im
         return send_file(b, mimetype='application/pdf', as_attachment=True, download_name=f'{ds}_{sid}.pdf')
     if kind in ('student.json', 'general.json'):
         data = (dict(source=dict(file=j['meta']['source_pdf'], sha256=j['meta']['sha256'],
