@@ -28,6 +28,17 @@ def log(*a):
     print('[results]', *a, file=sys.stderr, flush=True)
 
 
+def ranks(j):
+    """Unofficial rank by the printed semester average (م.ف). Ties share a rank. Students without results are excluded."""
+    ci = next((c['idx'] for c in j['columns'] if c['label'] == 'م.ف'), None)
+    vals = {}
+    for sid, r in j['students'].items():
+        if ci is not None and not r['no_result']:
+            try: vals[sid] = float(r['cells'][ci])
+            except ValueError: pass
+    return {sid: (1 + sum(x > v for x in vals.values()), sum(x == v for x in vals.values()) > 1) for sid, v in vals.items()}
+
+
 DS, INDEX = {}, collections.defaultdict(list)
 GROUPS = collections.defaultdict(dict)
 for f in sorted(DATA.iterdir()) if DATA.exists() else []:
@@ -47,7 +58,7 @@ for key, g in GROUPS.items():
             log(f'SKIPPED "{key}": the PDF does not match its JSON (sha256)')
             continue
         name = re.sub(r'[^A-Za-z0-9_-]', '', g['json'].stem) or key
-        DS[name] = dict(j=j, src=Source(g['pdf']), general=g['general'])
+        DS[name] = dict(j=j, src=Source(g['pdf']), general=g['general'], rank=ranks(j))
         for sid in j['students']:
             INDEX[sid].append(name)
         log(f'loaded "{name}": {len(j["students"])} students')
@@ -163,7 +174,9 @@ def api_result():
     out = []
     for ds in INDEX[sid]:
         j = DS[ds]['j']
-        out.append(dict(dataset=ds, label=j['meta']['label'], student=view(j, sid), general=general(j),
+        rk = DS[ds]['rank'].get(sid)   # only ranks 1-10 are ever sent to the client
+        out.append(dict(dataset=ds, label=j['meta']['label'], student=view(j, sid),
+                        rank=dict(n=rk[0], tie=rk[1]) if rk and rk[0] <= 10 else None, general=general(j),
                         source=dict(file=j['meta']['source_pdf'], sha256=j['meta']['sha256']), links=links(ds, sid),
                         name_img=f'/cell/{ds}/name/{sid}.png', row_img=f'/cell/{ds}/row/{sid}.png',
                         course_imgs={c['no']: f'/cell/{ds}/course/{c["no"]}.png' for c in j['courses'].values() if c.get('name_box')}))
@@ -194,12 +207,12 @@ def cell(ds, kind, key):
         if not c or not c.get('name_box'):
             abort(404)
         with LOCK:
-            return png(d['src'].clip(c['name_box']['page'], c['name_box']['bbox'], scale=3))
+            return png(d['src'].clip(c['name_box']['page'], c['name_box']['bbox'], pad=-1.3, scale=3))
     d = guard(ds, key)
     rec = d['j']['students'][key]
     with LOCK:
         if kind == 'name' and rec.get('name_box'):
-            return png(d['src'].clip(rec['name_box']['page'], rec['name_box']['bbox'], scale=3))
+            return png(d['src'].clip(rec['name_box']['page'], rec['name_box']['bbox'], pad=-1.3, scale=3))
         if kind == 'row':
             return png(student_image(d['src'], d['j']['header'], rec, '', scale=3))
     abort(404)
