@@ -24,7 +24,7 @@ class Source:
         self.path = str(path)
         self.pdf = pdfium.PdfDocument(self.path)
 
-    @functools.lru_cache(maxsize=6)
+    @functools.lru_cache(maxsize=3)
     def page_img(self, i, scale=S):
         return self.pdf[i].render(scale=scale).to_pil().convert('RGB')
 
@@ -89,5 +89,36 @@ def general_images(src, masks, scale=GS):
                 x0, t, x1, b = m['bbox']
                 d.rectangle([int((x0 - 1) * scale), int((t - 1) * scale),
                              int((x1 + 1) * scale), int((b + 1) * scale)], fill='white')
+        out.append(im)
+    return out
+
+
+def tight(im, m=5):
+    """Crop to the ink only (drops cell padding/borders)."""
+    from PIL import ImageOps
+    bb = ImageOps.invert(im.convert('L')).point(lambda p: 255 if p > 60 else 0).getbbox()
+    if not bb:
+        return im
+    return im.crop((max(0, bb[0] - m), max(0, bb[1] - m), min(im.width, bb[2] + m), min(im.height, bb[3] + m)))
+
+
+def general_with_student(src, masks, rec, scale=2.5):
+    """Whole document (stamps, tables, scale...) where the ONLY student row left is this student's,
+    placed right under the table header. Everything is pixels, so no other student's text survives."""
+    out = []
+    for i in range(len(src.pdf)):
+        im = src.pdf[i].render(scale=scale).to_pil().convert('RGB')
+        row = None
+        if rec['page'] == i:
+            x0, t, x1, b = rec['bbox']
+            row = im.crop((int((x0 - 1) * scale), int((t - 0.5) * scale), int((x1 + 1) * scale), int((b + 0.5) * scale)))
+        d = ImageDraw.Draw(im)
+        for m in masks:
+            if m['page'] == i:
+                mx0, mt, mx1, mb = m['bbox']
+                d.rectangle([int((mx0 - 1) * scale), int((mt - 1) * scale), int((mx1 + 1) * scale), int((mb + 1) * scale)], fill='white')
+                if row is not None:
+                    im.paste(row, (int((mx0 - 1) * scale), int((mt - 0.5) * scale)))
+                    row = None
         out.append(im)
     return out
