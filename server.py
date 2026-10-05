@@ -2,7 +2,7 @@
 Env: DATA_DIR (default data), TRUST_PROXY=1 behind a proxy, TURNSTILE_SITE_KEY / TURNSTILE_SECRET (optional CAPTCHA)."""
 import collections, io, json, os, pathlib, re, threading, time
 from flask import Flask, jsonify, request, send_file, abort, Response
-from common import Source, sha256, student_image, images_to_pdf, S
+from common import Source, sha256, student_image, images_to_pdf, S, tight, general_with_student
 
 BASE = pathlib.Path(__file__).resolve().parent
 app = Flask(__name__, static_folder=None)
@@ -10,8 +10,8 @@ DATA = pathlib.Path(os.environ.get('DATA_DIR', BASE / 'data'))
 LOCK = threading.Lock()          # pdfium is not thread-safe
 NOTFOUND = 'لم يتم العثور على نتيجة لهذا الرقم الجامعي.'
 DIGITS = str.maketrans('٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹', '01234567890123456789')
-KNOWN = {'ن.ت': 'نقاط تراكمية', 'س.ت': 'ساعات تراكمية', 'م.ت': 'المعدل التراكمي', 'م.ت.ا': 'المعدل التراكمي الأسبق',
-         'م.ت.س': 'المعدل التراكمي السابق', 'ن.ف': 'نقاط الفصل', 'س.ف': 'ساعات الفصل', 'م.ف': 'معدل الفصل'}
+KNOWN = {'cum_pts': 'نقاط تراكمية', 'cum_hrs': 'ساعات تراكمية', 'cum_gpa': 'المعدل التراكمي', 'cum_gpa_prev_a': 'المعدل التراكمي الأسبق',
+         'cum_gpa_prev_b': 'المعدل التراكمي السابق', 'sem_pts': 'نقاط الفصل', 'sem_hrs': 'ساعات الفصل', 'sem_gpa': 'معدل الفصل'}
 
 # ---------- load datasets ----------
 # Files are matched by a normalised name, so demo_s8 / demo-s8 / "demo_s8 (1)" still pair up.
@@ -29,14 +29,25 @@ def log(*a):
 
 
 def ranks(j):
-    """Unofficial rank by the printed semester average (م.ف). Ties share a rank. Students without results are excluded."""
-    ci = next((c['idx'] for c in j['columns'] if c['label'] == 'م.ف'), None)
-    vals = {}
+    """Unofficial rank by printed semester average; ties broken by cumulative average, then semester points.
+    Enabled ONLY when every student who has results also has a semester average (a pending/partial sheet gets no ranking).
+    Students with an F or a missing grade are excluded. Equal on every key => shared rank."""
+    lab = {c['key']: c['idx'] for c in j['columns'] if c.get('key')}
+    cc = [c['idx'] for c in j['columns'] if c['kind'] == 'course']
+    if 'sem_gpa' not in lab:
+        return {}
+    def num(r, k):
+        try: return float(r['cells'][lab[k]])
+        except Exception: return 0.0
+    active = [r for r in j['students'].values() if not r['no_result']]
+    if not active or any(not r['cells'][lab['sem_gpa']] for r in active):
+        return {}
+    keys = {}
     for sid, r in j['students'].items():
-        if ci is not None and not r['no_result']:
-            try: vals[sid] = float(r['cells'][ci])
-            except ValueError: pass
-    return {sid: (1 + sum(x > v for x in vals.values()), sum(x == v for x in vals.values()) > 1) for sid, v in vals.items()}
+        if r['no_result'] or any(not r['cells'][i] or r['cells'][i] == 'F' for i in cc):
+            continue
+        keys[sid] = (num(r, 'sem_gpa'), num(r, 'cum_gpa'), num(r, 'sem_pts'))
+    return {sid: (1 + sum(k > v for k in keys.values()), sum(k == v for k in keys.values()) > 1) for sid, v in keys.items()}
 
 
 DS, INDEX = {}, collections.defaultdict(list)
@@ -120,8 +131,8 @@ def view(j, sid):
                                      hours=info.get('hours', ''), grade=val,
                                      points=j['scale'].get(val, '')))
         elif k == 'summary':
-            v['summary'].append(dict(label=c['label'], value=val,
-                                     meaning=KNOWN.get(c['label']) or j['abbr'].get(c['label'], '')))
+            v['summary'].append(dict(label=c['label'], key=c.get('key'), value=val,
+                                     meaning=KNOWN.get(c.get('key')) or j['abbr'].get(c['label'], '')))
     v['courses'].sort(key=lambda x: int(x['no']) if x['no'].isdigit() else 0)
     return v
 
@@ -143,7 +154,7 @@ def headers(r):
     if request.path.startswith(('/api', '/dl', '/cell')):
         r.headers['Cache-Control'] = 'no-store'
     else:
-        r.headers['Content-Security-Policy'] = ("default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; "
+        r.headers['Content-Security-Policy'] = ("default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; "
                                                 "script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com; "
                                                 "frame-src https://challenges.cloudflare.com")
     return r
@@ -174,11 +185,12 @@ def api_result():
     out = []
     for ds in INDEX[sid]:
         j = DS[ds]['j']
-        rk = DS[ds]['rank'].get(sid)   # only ranks 1-10 are ever sent to the client
+        rk = DS[ds]['rank'].get(sid)   # only ranks 1-3 are ever sent to the client
         out.append(dict(dataset=ds, label=j['meta']['label'], student=view(j, sid),
-                        rank=dict(n=rk[0], tie=rk[1]) if rk and rk[0] <= 10 else None, general=general(j),
+                        rank=dict(n=rk[0], tie=rk[1]) if rk and rk[0] <= 3 else None, general=general(j),
                         source=dict(file=j['meta']['source_pdf'], sha256=j['meta']['sha256']), links=links(ds, sid),
-                        name_img=f'/cell/{ds}/name/{sid}.png', row_img=f'/cell/{ds}/row/{sid}.png',
+                        name_img=f'/cell/{ds}/name/{sid}.png',
+                        note_img=f'/cell/{ds}/note/{sid}.png' if j['students'][sid].get('note_box') else None, row_img=f'/cell/{ds}/row/{sid}.png',
                         course_imgs={c['no']: f'/cell/{ds}/course/{c["no"]}.png' for c in j['courses'].values() if c.get('name_box')}))
     return jsonify(results=out)
 
@@ -207,12 +219,14 @@ def cell(ds, kind, key):
         if not c or not c.get('name_box'):
             abort(404)
         with LOCK:
-            return png(d['src'].clip(c['name_box']['page'], c['name_box']['bbox'], pad=-1.3, scale=3))
+            return png(tight(d['src'].clip(c['name_box']['page'], c['name_box']['bbox'], pad=0, scale=4)))
     d = guard(ds, key)
     rec = d['j']['students'][key]
     with LOCK:
         if kind == 'name' and rec.get('name_box'):
-            return png(d['src'].clip(rec['name_box']['page'], rec['name_box']['bbox'], pad=-1.3, scale=3))
+            return png(tight(d['src'].clip(rec['name_box']['page'], rec['name_box']['bbox'], pad=0, scale=4)))
+        if kind == 'note' and rec.get('note_box'):
+            return png(tight(d['src'].clip(rec['note_box']['page'], rec['note_box']['bbox'], pad=0, scale=4)))
         if kind == 'row':
             return png(student_image(d['src'], d['j']['header'], rec, '', scale=3))
     abort(404)
@@ -223,7 +237,10 @@ def download(ds, sid, kind):
     d = guard(ds, sid)
     j = d['j']
     if kind == 'general.pdf':
-        return send_file(d['general'], mimetype='application/pdf', as_attachment=True, download_name=f'{ds}_general.pdf')
+        with LOCK:
+            ims = general_with_student(d['src'], j['masks'], j['students'][sid])
+        b = io.BytesIO(); images_to_pdf(ims, 2.5, b); b.seek(0)
+        return send_file(b, mimetype='application/pdf', as_attachment=True, download_name=f'{ds}_{sid}_stamps.pdf')
     if kind == 'student.pdf':
         rec = j['students'][sid]
         foot = f'Source: {j["meta"]["source_pdf"]} | page {rec["page"] + 1} | SHA-256 {j["meta"]["sha256"]}'
