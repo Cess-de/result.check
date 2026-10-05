@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>الاستعلام عن النتيجة</title>
+<style>
+:root{--bg:#f4f6fa;--card:#fff;--ink:#1b2430;--mut:#667085;--pri:#1d4ed8;--ok:#047857;--bad:#b91c1c;--line:#e4e7ec}
+@media(prefers-color-scheme:dark){:root{--bg:#0f141b;--card:#18202b;--ink:#e8edf4;--mut:#98a2b3;--pri:#6d9bff;--ok:#34d399;--bad:#f87171;--line:#2a3544}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,"Segoe UI",Tahoma,sans-serif;line-height:1.7}
+main{max-width:860px;margin:auto;padding:16px}h1{font-size:1.4rem;text-align:center}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0}
+form{display:flex;gap:8px}input{flex:1;font-size:1.2rem;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);direction:ltr;text-align:center}
+button,.btn{background:var(--pri);color:#fff;border:0;border-radius:10px;padding:12px 18px;font-size:1rem;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.alt{background:transparent;color:var(--pri);border:1px solid var(--pri)}
+.err{color:var(--bad);text-align:center;margin:10px 0}.mut{color:var(--mut);font-size:.9rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.kv{background:var(--bg);border-radius:10px;padding:10px;text-align:center}.kv b{display:block;font-size:1.25rem;direction:ltr}
+.kv small{color:var(--mut)}table{width:100%;border-collapse:collapse;font-size:.95rem}th,td{padding:8px;border-bottom:1px solid var(--line);text-align:right}
+.g{font-weight:700;direction:ltr;text-align:center}.F{color:var(--bad)}.top{color:var(--ok)}
+.imgbox{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:#fff;padding:4px}.imgbox img{max-width:none;height:auto;display:block}
+.nm{height:34px;background:#fff;border-radius:6px;padding:2px 6px;vertical-align:middle}
+details summary{cursor:pointer;font-weight:700}.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+</style>
+</head>
+<body><main>
+<h1>الاستعلام عن النتيجة</h1>
+<div class="card">
+<form id="f"><input id="sid" inputmode="numeric" autocomplete="off" placeholder="الرقم الجامعي" required><button>عرض النتيجة</button></form>
+<div id="cf" style="margin-top:8px"></div>
+<div class="mut" style="margin-top:8px">تُعرض نتيجتك أنت فقط. النتيجة الرسمية هي الملف الأصلي الصادر من الجامعة، وكل ما هنا مأخوذ منه.</div>
+</div>
+<div id="err" class="err"></div><div id="out"></div>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let cfToken='',tsKey='';
+fetch('/api/config').then(r=>r.json()).then(c=>{if(c.turnstile){tsKey=c.turnstile;const s=document.createElement('script');s.src='https://challenges.cloudflare.com/turnstile/v0/api.js?onload=tsReady';s.async=true;document.head.appendChild(s)}});
+window.tsReady=()=>turnstile.render('#cf',{sitekey:tsKey,callback:t=>cfToken=t});
+const mean={'A+':'ممتاز مرتفع','A':'ممتاز','B+':'جيد جداً مرتفع','B':'جيد جداً','C+':'جيد','C':'مقبول','F':'راسب'};
+function render(r){
+ const s=r.student,g=r.general,fail=x=>x==='F';
+ let h=`<div class="card"><h2 style="margin-top:0">${esc(r.label)}</h2>
+ <div class="mut">الاسم كما ورد في الملف الرسمي:</div><img class="nm" src="${r.name_img}" alt="الاسم"><div class="mut">الرقم الجامعي: <b dir="ltr">${esc(s.id)}</b></div></div>`;
+ if(s.no_result){
+  h+=`<div class="card"><b>الرقم موجود في الكشف لكن لا توجد درجات مسجلة له في هذا الفصل.</b><div class="mut">راجع شؤون الطلاب. يمكنك مقارنة ذلك بصورة صفك الأصلية أدناه.</div></div>`;
+ }else{
+  if(s.notes)h+=`<div class="card"><b>الملاحظات:</b> ${esc(s.notes)}</div>`;
+  h+=`<div class="card"><h3 style="margin-top:0">ملخص الفصل والمعدلات</h3><div class="grid">`+
+   s.summary.filter(x=>x.value).map(x=>`<div class="kv"><small>${esc(x.meaning||x.label)}</small><b>${esc(x.value)}</b><small dir="ltr">${esc(x.label)}</small></div>`).join('')+`</div></div>`;
+  h+=`<div class="card"><h3 style="margin-top:0">المقررات والتقديرات</h3><div style="overflow-x:auto"><table><tr><th>#</th><th>الرمز</th><th>المقرر</th><th>الساعات</th><th>التقدير</th><th>النقاط</th></tr>`+
+   s.courses.map(c=>`<tr><td>${esc(c.no)}</td><td dir="ltr">${esc(c.code)}</td><td>${r.course_imgs[c.no]?`<img class="nm" src="${r.course_imgs[c.no]}" alt="">`:esc(c.name)}</td><td>${esc(c.hours)}</td>
+   <td class="g ${fail(c.grade)?'F':''}">${esc(c.grade||'—')}</td><td class="g">${esc(c.points)}</td></tr>`).join('')+`</table></div></div>`;
+ }
+ h+=`<div class="card"><h3 style="margin-top:0">تحقق بنفسك: صفك في الملف الرسمي</h3><div class="mut">هذه صورة مقصوصة مباشرة من الملف الأصلي (العناوين + صفك فقط). قارنها بما فوق.</div>
+ <div class="imgbox"><img src="${r.row_img}" alt="صفك في الملف الأصلي"></div></div>`;
+ h+=`<div class="card"><h3 style="margin-top:0">تنزيل</h3><div class="btns">
+ <a class="btn" href="${r.links['student.pdf']}">نتيجتي (مقصوصة من الأصل) PDF</a>
+ <a class="btn" href="${r.links['general.pdf']}">البيانات العامة والأختام PDF</a>
+ <a class="btn alt" href="${r.links['student.json']}">نتيجتي JSON</a>
+ <a class="btn alt" href="${r.links['general.json']}">البيانات العامة JSON</a></div>
+ <div class="mut" style="margin-top:8px">بصمة الملف الأصلي (SHA-256): <span dir="ltr" style="word-break:break-all">${esc(r.source.sha256)}</span></div></div>`;
+ h+=`<div class="card"><details><summary>شرح الرموز وسلم التقديرات</summary><table style="margin-top:8px">`+
+  Object.entries(g.scale).filter(([k,v])=>mean[k]).map(([k,v])=>`<tr><td class="g">${esc(k)}</td><td>${mean[k]}</td><td class="g">${esc(v)} نقطة</td></tr>`).join('')+
+  `</table><div class="mut" style="margin-top:8px">المعدل = مجموع (نقاط التقدير × ساعات المقرر) ÷ مجموع الساعات.</div></details></div>`;
+ if(g.distribution)h+=`<div class="card"><details><summary>توزيع التقديرات في كل مقرر (بيانات عامة لكل الدفعة)</summary><div style="overflow-x:auto"><table style="margin-top:8px"><tr><th>المقرر</th>`+
+  g.distribution.columns.map(c=>`<th class="g">${esc(c)}</th>`).join('')+`</tr>`+
+  g.distribution.rows.map((row,i)=>{const cr=g.courses.find(c=>c.name===row.course);const im=cr&&r.course_imgs[cr.no];return `<tr><td>${im?`<img class="nm" src="${im}" alt="">`:esc(row.course)}</td>`+g.distribution.columns.map(c=>`<td class="g">${esc(row.counts[c])}</td>`).join('')+'</tr>'}).join('')+`</table></div></details></div>`;
+ return h;
+}
+$('#f').onsubmit=async e=>{e.preventDefault();$('#err').textContent='';$('#out').innerHTML='';
+ const r=await fetch('/api/result',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:$('#sid').value,cf:cfToken})});
+ const d=await r.json().catch(()=>({}));
+ if(!r.ok){$('#err').textContent=d.error||'حدث خطأ';if(window.turnstile)turnstile.reset();return}
+ $('#out').innerHTML=d.results.map(render).join('');if(window.turnstile)turnstile.reset();};
+</script>
+</main></body></html>
