@@ -13,19 +13,46 @@ DIGITS = str.maketrans('٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹', '012345678901
 KNOWN = {'ن.ت': 'نقاط تراكمية', 'س.ت': 'ساعات تراكمية', 'م.ت': 'المعدل التراكمي', 'م.ت.ا': 'المعدل التراكمي الأسبق',
          'م.ت.س': 'المعدل التراكمي السابق', 'ن.ف': 'نقاط الفصل', 'س.ف': 'ساعات الفصل', 'م.ف': 'معدل الفصل'}
 
-# ---------- load datasets (fail fast if JSON does not belong to its PDF) ----------
+# ---------- load datasets ----------
+# Files are matched by a normalised name, so demo_s8 / demo-s8 / "demo_s8 (1)" still pair up.
+# A dataset that is incomplete or whose PDF does not match its JSON (sha256) is NEVER served; it is skipped
+# and reported in the log, and the rest of the site keeps working.
+import sys
+
+
+def norm(base):
+    return re.sub(r'[^a-z0-9]', '', re.sub(r'\(\d+\)', '', base.lower()))
+
+
+def log(*a):
+    print('[results]', *a, file=sys.stderr, flush=True)
+
+
 DS, INDEX = {}, collections.defaultdict(list)
-for jf in sorted(DATA.glob('*.json')):
-    name = jf.stem
-    j = json.loads(jf.read_text('utf-8'))
-    pdf, gen = DATA / f'{name}.pdf', DATA / f'{name}.general.pdf'
-    if not pdf.exists() or not gen.exists():
-        raise RuntimeError(f'{name}: missing pdf files')
-    if sha256(pdf) != j['meta']['sha256']:
-        raise RuntimeError(f'{name}: PDF does not match its JSON (sha256) - refusing to start')
-    DS[name] = dict(j=j, src=Source(pdf), general=gen)
-    for sid in j['students']:
-        INDEX[sid].append(name)
+GROUPS = collections.defaultdict(dict)
+for f in sorted(DATA.iterdir()) if DATA.exists() else []:
+    n = f.name
+    if n.lower().endswith('.general.pdf'): GROUPS[norm(n[:-12])]['general'] = f
+    elif n.lower().endswith('.pdf'): GROUPS[norm(n[:-4])]['pdf'] = f
+    elif n.lower().endswith('.json'): GROUPS[norm(n[:-5])]['json'] = f
+log('files in data:', sorted(x.name for x in DATA.iterdir()) if DATA.exists() else 'NO data FOLDER')
+for key, g in GROUPS.items():
+    missing = [k for k in ('json', 'pdf', 'general') if k not in g]
+    if missing:
+        log(f'SKIPPED "{key}": missing {missing}. Needs 3 files: NAME.json, NAME.pdf, NAME.general.pdf')
+        continue
+    try:
+        j = json.loads(g['json'].read_text('utf-8'))
+        if sha256(g['pdf']) != j['meta']['sha256']:
+            log(f'SKIPPED "{key}": the PDF does not match its JSON (sha256)')
+            continue
+        name = re.sub(r'[^A-Za-z0-9_-]', '', g['json'].stem) or key
+        DS[name] = dict(j=j, src=Source(g['pdf']), general=g['general'])
+        for sid in j['students']:
+            INDEX[sid].append(name)
+        log(f'loaded "{name}": {len(j["students"])} students')
+    except Exception as e:
+        log(f'SKIPPED "{key}": {e!r}')
 
 # ---------- abuse protection ----------
 REQ, DLQ, FAIL = (collections.defaultdict(collections.deque) for _ in range(3))
