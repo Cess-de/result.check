@@ -24,15 +24,17 @@ class Source:
         self.path = str(path)
         self.pdf = pdfium.PdfDocument(self.path)
 
-    @functools.lru_cache(maxsize=3)
+    @functools.lru_cache(maxsize=1)
     def page_img(self, i, scale=S):
         return self.pdf[i].render(scale=scale).to_pil().convert('RGB')
 
     def clip(self, i, bbox, pad=0.5, scale=S):
-        im = self.page_img(i, scale)
+        """Render ONLY the requested rectangle (never a whole page): small and fast, so memory stays low."""
+        page = self.pdf[i]
+        W, H = page.get_size()
         x0, t, x1, b = bbox
-        return im.crop((max(0, int((x0 - pad) * scale)), max(0, int((t - pad) * scale)),
-                        int((x1 + pad) * scale), int((b + pad) * scale)))
+        l, tp, r, bt = max(0, x0 - pad), max(0, t - pad), min(W, x1 + pad), min(H, b + pad)
+        return page.render(scale=scale, crop=(l, H - bt, W - r, tp)).to_pil().convert('RGB')
 
     def text_in(self, i, bbox, inset=1.0):
         """Independent text extraction (pdfium) inside a bbox (top-left coords)."""
