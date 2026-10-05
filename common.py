@@ -124,3 +124,48 @@ def general_with_student(src, masks, rec, scale=2.5):
                     row = None
         out.append(im)
     return out
+
+
+def build_base(src, masks, scale=2):
+    """One-time: the whole document with every student row painted out, as ONE small PDF (JPEG pages)."""
+    out = io.BytesIO()
+    c = canvas.Canvas(out)
+    for i in range(len(src.pdf)):
+        im = src.pdf[i].render(scale=scale).to_pil().convert('RGB')
+        d = ImageDraw.Draw(im)
+        for m in masks:
+            if m['page'] == i:
+                x0, t, x1, b = m['bbox']
+                d.rectangle([int((x0 - 1) * scale), int((t - 1) * scale), int((x1 + 1) * scale), int((b + 1) * scale)], fill='white')
+        buf = io.BytesIO()
+        im.save(buf, 'JPEG', quality=85)
+        buf.seek(0)
+        w, h = im.width / scale, im.height / scale
+        c.setPageSize((w, h))
+        c.drawImage(ImageReader(buf), 0, 0, w, h)
+        c.showPage()
+        del im, buf
+    c.save()
+    return out.getvalue()
+
+
+def general_pdf(base_pdf, masks, rec, row_img, out, rs=3):
+    """Stamps + info document = pre-masked pages + ONLY this student's row, merged without re-decoding any page image."""
+    from pypdf import PdfReader, PdfWriter
+    reader = PdfReader(io.BytesIO(base_pdf))
+    m = next((m for m in masks if m['page'] == rec['page']), None)
+    if m:
+        pg = reader.pages[rec['page']]
+        w, h = float(pg.mediabox.width), float(pg.mediabox.height)
+        ov = io.BytesIO()
+        c = canvas.Canvas(ov, pagesize=(w, h))
+        buf = io.BytesIO(); row_img.save(buf, 'PNG'); buf.seek(0)
+        rw, rh = row_img.width / rs, row_img.height / rs
+        c.drawImage(ImageReader(buf), rec['bbox'][0] - 0.5, h - (m['bbox'][1] - 0.5) - rh, rw, rh)
+        c.save()
+        ov.seek(0)
+        pg.merge_page(PdfReader(ov).pages[0])
+    wr = PdfWriter()
+    for p in reader.pages:
+        wr.add_page(p)
+    wr.write(out)
