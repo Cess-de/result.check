@@ -1,80 +1,77 @@
 <!doctype html>
 <html lang="ar" dir="rtl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0f2a2e">
-<title>بوابة النتائج</title>
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#fbfaf7">
+<title>الاستعلام عن النتيجة</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Aref+Ruqaa:wght@400;700&family=Katibeh&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f6efe0;--card:#fffdf7;--ink:#1d2b2e;--mut:#6b7a7c;--line:#e6dcc4;--teal:#117a76;--gold:#d99a1e;--coral:#e0553a;--plum:#7b3f7a;--deep:#0f2a2e}
-@media(prefers-color-scheme:dark){:root{--bg:#0d1719;--card:#152427;--ink:#f1ead8;--mut:#9db0b1;--line:#24393c}}
+:root{--bg:#fbfaf7;--card:#fff;--ink:#16181a;--mut:#7b8086;--line:#ebe8e1;--acc:#0f6b5f;--gold:#b8860b;--soft:#f3f1ea}
+@media(prefers-color-scheme:dark){:root{--bg:#0e0f10;--card:#161718;--ink:#f2f1ee;--mut:#9a9fa5;--line:#272a2c;--acc:#45c2ae;--gold:#e0b64a;--soft:#1d1f21}.im{filter:invert(1) hue-rotate(180deg)}}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Tajawal,system-ui,sans-serif;line-height:1.75;font-size:16px}
-.stripe{height:5px;background:linear-gradient(90deg,var(--coral) 0 25%,var(--gold) 0 50%,var(--teal) 0 75%,var(--plum) 0)}
-.hero{position:relative;overflow:hidden;background:var(--deep);color:#fff;text-align:center;padding:calc(30px + env(safe-area-inset-top)) 18px 80px}
-.hero:before{content:"";position:absolute;inset:-60% -30% auto;height:230%;background:repeating-conic-gradient(from 0deg at 50% 18%,rgba(217,154,30,.28) 0 5deg,transparent 5deg 12deg,rgba(224,85,58,.2) 12deg 15deg,transparent 15deg 24deg,rgba(17,122,118,.35) 24deg 28deg,transparent 28deg 36deg);-webkit-mask:radial-gradient(circle at 50% 18%,#000,transparent 62%);mask:radial-gradient(circle at 50% 18%,#000,transparent 62%)}
-.hero>*{position:relative}.hero h1{font:700 2.1rem 'Aref Ruqaa',serif;margin:0;color:#ffd77a}
-.hero .q{font:400 1.25rem/2 'Aref Ruqaa',serif;margin:10px auto 0;max-width:520px;min-height:5.2em;opacity:.95}.hero .q small{display:block;font:400 .8rem Tajawal;opacity:.7}
-main{max-width:720px;margin:-52px auto 0;padding:0 14px 30px;position:relative}
-.card{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--teal);border-radius:16px;padding:16px;margin:14px 0;box-shadow:0 8px 24px rgba(15,42,46,.08)}
-.card:nth-of-type(4n+2){border-top-color:var(--gold)}.card:nth-of-type(4n+3){border-top-color:var(--coral)}.card:nth-of-type(4n){border-top-color:var(--plum)}
-.card h3{margin:0 0 10px;font-size:1.15rem;font-weight:800}.mut{color:var(--mut);font-size:.88rem}
-.row{display:flex;gap:8px}input{flex:1;min-width:0;font:700 1.45rem Tajawal;letter-spacing:2px;padding:14px;border:2px solid var(--line);border-radius:14px;background:var(--bg);color:var(--ink);direction:ltr;text-align:center;outline:0}input:focus{border-color:var(--gold)}
-button,.btn{font:700 1rem Tajawal;border:0;border-radius:14px;padding:14px 16px;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;text-align:center}
-.go{width:100%;margin-top:10px;background:linear-gradient(135deg,var(--teal),#0b5c59);color:#fff;font-size:1.1rem}.go:disabled{opacity:.6}
-.sec{background:var(--bg);color:var(--teal);border:2px solid var(--line);white-space:nowrap}
-.err{background:#fde8e3;color:#9a2a12;border-radius:12px;padding:10px;text-align:center;margin-top:10px;display:none}
-.tabs{display:flex;gap:6px;overflow-x:auto}.tabs button{background:var(--card);color:var(--ink);border:1px solid var(--line);white-space:nowrap}.tabs .on{background:var(--gold);color:#2b1d00}
-.nm{display:block;background:#fff;border-radius:8px;padding:4px 10px;max-width:100%;height:auto;margin:6px 0}
-.chip{display:inline-block;border-radius:99px;padding:1px 14px;font-weight:700;background:#e4f1ef;color:#0b5c59}.chip.no{background:#fde8e3;color:#9a2a12}
-.rank{background:linear-gradient(135deg,#f3b93d,#ffe08a);color:#3b2700;border-radius:16px;padding:16px;margin:14px 0;text-align:center;font:700 1.45rem 'Aref Ruqaa',serif;box-shadow:0 8px 24px rgba(217,154,30,.3)}.rank small{display:block;font:400 .78rem Tajawal;opacity:.8}
-.kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px}.k{border-radius:14px;padding:12px;text-align:center;background:var(--bg);border-bottom:4px solid var(--coral)}.k+.k{border-color:var(--teal)}.k b{display:block;font:800 2rem Tajawal;direction:ltr}.k small{color:var(--mut)}
-.mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-top:10px}.mini div{border:1px dashed var(--line);border-radius:12px;padding:6px;text-align:center}.mini b{display:block;direction:ltr}.mini small{color:var(--mut);font-size:.75rem}
-.course{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px dashed var(--line)}.course:last-child{border:0}.ci{flex:1;min-width:0}.ci img{display:block;background:#fff;border-radius:6px;padding:3px 8px;max-width:100%;height:auto}.ci small{color:var(--mut);font-size:.82rem}
-.b{width:60px;height:60px;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;font:800 1.4rem Tajawal;direction:ltr;flex:none;gap:0;line-height:1.1}.b small{font:500 .7rem Tajawal}
-.gA{background:#d6efe3;color:#0b5c3b}.gB{background:#d3ecf0;color:#0b5560}.gC{background:#faecc8;color:#845100}.gF{background:#fbd9d1;color:#9a2a12}.g0{background:var(--line);color:var(--mut)}
-.blocked{background:#fff3d6;border:2px solid var(--gold);color:#7a4b00;border-radius:16px;padding:18px;margin:14px 0;text-align:center;font-weight:700;line-height:2}
-.acts{display:grid;gap:10px}.acts .btn{color:#fff;padding:16px;font-size:1.05rem}.a1{background:linear-gradient(135deg,var(--coral),#b83a22)}.a2{background:linear-gradient(135deg,var(--plum),#54284f)}.acts small{display:block;font:400 .75rem Tajawal;opacity:.85}
-details summary{cursor:pointer;font-weight:800;font-size:1.05rem;list-style:none}details summary::before{content:"◂ ";color:var(--gold)}details[open] summary::before{content:"▾ "}
-.imgbox{overflow-x:auto;background:#fff;border-radius:10px;padding:4px;margin-top:8px}.imgbox img{display:block;max-width:none;width:900px;height:auto}
-table{width:100%;border-collapse:collapse;font-size:.88rem}td,th{padding:6px 4px;border-bottom:1px dashed var(--line);text-align:center}th{color:var(--mut);font-weight:500}tfoot td{font-weight:800;border-top:2px solid var(--gold)}
-.note{background:var(--bg);border-radius:10px;padding:8px 10px;margin-top:8px;font-size:.85rem}select{font:inherit;padding:8px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
-.wr{display:flex;gap:6px;margin:6px 0}.wr select{flex:1}.add{background:var(--bg);color:var(--teal);border:2px dashed var(--teal);width:100%;margin-top:6px}
-.res{font:800 1.6rem Tajawal;text-align:center;color:var(--teal);direction:ltr;margin-top:8px}
-.poem{text-align:center;padding:14px 4px;border-bottom:1px dashed var(--line)}.poem:last-child{border:0}.poem p{margin:0;font:400 1.35rem/2.1 'Aref Ruqaa',serif}.poem.d p{font:400 1.7rem/1.9 'Katibeh','Aref Ruqaa',serif;color:var(--coral)}.poem small{display:block;color:var(--mut);font-size:.82rem;margin-top:4px}.poem em{display:block;font-style:normal;color:var(--teal);font-size:.88rem}
-.sha{word-break:break-all;direction:ltr;font-size:.7rem;color:var(--mut);margin-top:8px}footer{text-align:center;color:var(--mut);font-size:.8rem;padding:10px}
-</style></head><body>
-<div class="stripe"></div>
-<div class="hero"><h1>بوابة النتائج</h1><div class="q" id="hq"></div></div>
-<main>
-<div class="card"><div class="row"><input id="sid" inputmode="numeric" autocomplete="off" placeholder="الرقم الجامعي" maxlength="12"><button class="sec" id="pb" type="button">📋 لصق</button></div>
-<div id="cf" style="margin-top:8px"></div><button class="go" id="go">🔎 فحص النتيجة</button><div class="err" id="err"></div>
-<div class="mut" style="margin-top:10px;text-align:center">تُعرض نتيجتك أنت فقط، والمرجع الرسمي هو الملف الأصلي الصادر من الجامعة.</div></div>
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.8 Tajawal,system-ui,sans-serif}
+main{max-width:600px;margin:auto;padding:calc(40px + env(safe-area-inset-top)) 18px 40px}
+h1{font:800 1.9rem/1.3 Tajawal;margin:0}
+.verse{font:400 1.2rem/2 'Aref Ruqaa',serif;color:var(--mut);margin:6px 0 26px;min-height:4em}.verse small{display:block;font:400 .78rem Tajawal}
+.mut{color:var(--mut);font-size:.88rem}
+.box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin:14px 0}
+.row{display:flex;gap:10px;align-items:center}
+input{flex:1;min-width:0;font:700 1.6rem Tajawal;letter-spacing:3px;padding:10px 4px;border:0;border-bottom:2px solid var(--line);background:transparent;color:var(--ink);direction:ltr;text-align:center;outline:0;border-radius:0}input:focus{border-color:var(--acc)}
+button,.btn{font:700 1rem Tajawal;border:0;border-radius:14px;padding:15px 18px;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px}
+.go{width:100%;margin-top:18px;background:var(--ink);color:var(--bg);font-size:1.08rem}.go:disabled{opacity:.55}
+.link{background:none;color:var(--acc);padding:8px;white-space:nowrap}
+.err{color:#c0392b;text-align:center;margin-top:12px;display:none}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin:22px 0 0}.tabs button{background:none;color:var(--mut);border:1px solid var(--line);padding:8px 16px;white-space:nowrap}.tabs .on{color:var(--bg);background:var(--ink);border-color:var(--ink)}
+.im{display:block;background:#fff;border-radius:8px;padding:3px 8px;max-width:100%;height:auto}
+.id{margin-top:26px}.id .im{margin:6px 0}
+.chip{display:inline-block;border-radius:99px;padding:0 14px;background:var(--soft);font-weight:700}.chip.no{color:#c0392b}
+.rank{margin:14px 0;padding:14px 18px;border-radius:18px;background:var(--soft);border:1px solid var(--gold);text-align:center;font:700 1.35rem 'Aref Ruqaa',serif;color:var(--gold)}.rank small{display:block;font:400 .78rem Tajawal;color:var(--mut)}
+.kpi{display:flex;gap:12px}.k{flex:1;text-align:center;padding:6px 0}.k b{display:block;font:800 2.6rem/1.2 Tajawal;direction:ltr;color:var(--acc)}.k small{color:var(--mut)}.k+.k{border-right:1px solid var(--line)}
+.mini{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:.85rem;color:var(--mut)}.mini b{color:var(--ink);direction:ltr;display:inline-block}
+h3{font:800 1.05rem Tajawal;margin:0 0 6px}
+.course{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}.course:last-child{border:0}.ci{flex:1;min-width:0}.ci small{color:var(--mut)}
+.nm{font-weight:700;font-size:1.12rem;line-height:1.5}
+.g{min-width:56px;text-align:center;font:800 1.5rem/1.1 Tajawal;direction:ltr}.g small{display:block;font:400 .7rem Tajawal;color:var(--mut)}
+.gA{color:#0f7a4f}.gB{color:#0b6b8a}.gC{color:#a86a00}.gF{color:#c0392b}.g0{color:var(--mut)}
+.blocked{margin:14px 0;padding:18px;border-radius:18px;border:1px solid var(--gold);background:var(--soft);text-align:center;font-weight:700;line-height:2}
+.acts{display:grid;gap:10px;margin:14px 0}.acts .btn{padding:16px;font-size:1.02rem;flex-direction:column;gap:0}.acts small{font:400 .75rem Tajawal;opacity:.8}.p1{background:var(--acc);color:#fff}.p2{background:var(--card);color:var(--ink);border:1px solid var(--ink)}
+details{border-top:1px solid var(--line);padding:12px 0}details:first-of-type{margin-top:6px}summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between}summary:after{content:"＋";color:var(--mut)}details[open] summary:after{content:"－"}
+.imgbox{overflow-x:auto;margin-top:10px;background:#fff;border-radius:8px}.imgbox img{display:block;max-width:none;width:880px;height:auto}
+table{width:100%;border-collapse:collapse;font-size:.88rem;margin-top:8px}td,th{padding:7px 3px;border-bottom:1px solid var(--line);text-align:center}th{color:var(--mut);font-weight:500}tfoot td{font-weight:800}
+.note{background:var(--soft);border-radius:12px;padding:9px 12px;margin-top:10px;font-size:.85rem}select{font:inherit;padding:9px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.wr{display:flex;gap:6px;margin:8px 0}.wr select{flex:1}.add{background:none;border:1px dashed var(--acc);color:var(--acc);width:100%;margin-top:6px;padding:11px}
+.res{font:800 1.7rem Tajawal;text-align:center;color:var(--acc);direction:ltr;margin-top:10px}
+.poem{text-align:center;padding:14px 0;border-bottom:1px solid var(--line)}.poem:last-child{border:0}.poem p{margin:0;font:400 1.3rem/2.1 'Aref Ruqaa',serif}.poem.d p{font:400 1.65rem/1.9 Katibeh,'Aref Ruqaa',serif}.poem small{display:block;color:var(--mut)}.poem em{display:block;font-style:normal;color:var(--acc);font-size:.88rem}
+.sha{word-break:break-all;direction:ltr;font-size:.68rem;color:var(--mut);margin-top:8px}footer{text-align:center;color:var(--mut);font-size:.78rem;margin-top:30px}
+</style></head><body><main>
+<h1>الاستعلام عن النتيجة</h1>
+<div class="verse" id="hq"></div>
+<div class="box"><div class="row"><input id="sid" inputmode="numeric" autocomplete="off" placeholder="الرقم الجامعي" maxlength="12"><button class="link" id="pb" type="button">لصق</button></div>
+<div id="cf" style="margin-top:8px"></div><button class="go" id="go">فحص النتيجة</button><div class="err" id="err"></div></div>
+<div class="mut" style="text-align:center">تُعرض نتيجتك أنت فقط، والمرجع الرسمي هو الملف الأصلي الصادر من الجامعة.</div>
 <div id="out"></div>
-<div class="card"><h3>📜 ديوان الاجتهاد</h3><div id="dv"></div></div>
-</main><footer>صُنع لطلاب الجامعة بكل الاحترام لجهدهم</footer>
+<div class="box" style="margin-top:30px"><details style="border:0;padding:0"><summary>ديوان الاجتهاد</summary><div id="dv"></div></details></div>
+<footer>بالتوفيق لكل مجتهد</footer>
+</main>
 <script>
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const dg=s=>s.replace(/[٠-٩]/g,d=>d.charCodeAt(0)-1632).replace(/[۰-۹]/g,d=>d.charCodeAt(0)-1776);
 const pick=t=>{const r=dg(t||'').match(/\d+/g)||[];return(r.find(x=>x.length>=6)||r[0]||'').slice(0,12)};
-const fit=(e,k)=>{e.style.width=Math.min(e.naturalWidth/4*k,(e.parentNode.clientWidth||9999)-(k>2?20:0))+'px'};window.fit=fit;
+window.fit=(e,k)=>{e.style.width=Math.min(e.naturalWidth/4*k,e.parentNode.clientWidth||9999)+'px'};
 const P=[['على قدرِ أهلِ العزمِ تأتي العزائمُ','وتأتي على قدرِ الكرامِ المكارمُ','المتنبي','العزيمة تُقاس بحجم الهدف؛ فمن كبُر طموحه كبُر جهده.'],
 ['إذا غامرتَ في شرفٍ مرومٍ','فلا تقنعْ بما دونَ النجومِ','المتنبي','لا ترضَ بنصف جهد وأنت تطلب القمة.'],
-['وما نيلُ المطالبِ بالتمنّي','ولكن تؤخذُ الدنيا غِلابا','أحمد شوقي','الأمنيات وحدها لا تصنع نجاحاً؛ إنما يصنعه العمل والمجاهدة.'],
-['وما استعصى على قومٍ منالٌ','إذا الإقدامُ كان لهمُ رِكابا','أحمد شوقي','لا يصعب هدف على من جعل الإقدام مركبه.'],
-['إذا الشعبُ يوماً أرادَ الحياةَ','فلا بدَّ أن يستجيبَ القدرْ','أبو القاسم الشابي','متى صدقت الإرادة فتحت الأبواب.']];
+['وما نيلُ المطالبِ بالتمنّي','ولكن تؤخذُ الدنيا غِلابا','أحمد شوقي','الأمنيات وحدها لا تصنع نجاحاً؛ يصنعه العمل والمجاهدة.'],
+['إذا الشعبُ يوماً أرادَ الحياةَ','فلا بدَّ أن يستجيبَ القدرْ','أبو القاسم الشابي','متى صدقت الإرادة فُتحت الأبواب.']];
 const A=[['ولقد أبيتُ على الطوى وأظلُّهُ','حتى أنالَ به كريمَ المأكلِ','يتحمّل الجوع والسهر ليبلغ المجد؛ وكذلك الطالب: تعبُ الليالي ثمنُ التفوّق.'],
-['ولقد شفى نفسي وأبرأ سقمَها','قيلُ الفوارسِ: ويكَ عنترَ أقدمِ','كلمة التشجيع تدفعه للأمام؛ فلا تتراجع أمام أصعب مادة، بل أقدِم.'],
-['يُخبرُك من شهدَ الوقيعةَ أنني','أغشى الوغى وأعفُّ عندَ المغنمِ','يقتحم الصعب ويحفظ نزاهته؛ اجتهد في الدراسة وانجح بأمانتك دون غش.'],
-['هلّا سألتِ الخيلَ يا ابنةَ مالكٍ','إن كنتِ جاهلةً بما لم تعلمي','الخبرة تؤخذ من أهلها وميدانها؛ اسأل المتفوقين وذاكر مع زملائك.']];
+['ولقد شفى نفسي وأبرأ سقمَها','قيلُ الفوارسِ: ويكَ عنترَ أقدمِ','كلمة التشجيع تدفعه للأمام؛ فأقدِم ولا تتراجع أمام أصعب مادة.'],
+['يُخبرُك من شهدَ الوقيعةَ أنني','أغشى الوغى وأعفُّ عندَ المغنمِ','يقتحم الصعب ويحفظ نزاهته؛ اجتهد وانجح بأمانتك دون غش.']];
 {const q=P[Math.floor(Math.random()*P.length)];$('#hq').innerHTML=`${q[0]}<br>${q[1]}<small>${q[2]}</small>`;
-$('#dv').innerHTML=P.map(q=>`<div class="poem"><p>${q[0]}<br>${q[1]}</p><small>${q[2]}</small><em>${q[3]}</em></div>`).join('')+
-`<div class="mut" style="text-align:center;margin-top:14px">⚔️ من فروسية عنترة بن شدّاد... إلى ميدان الاجتهاد</div>`+A.map(q=>`<div class="poem d"><p>${q[0]}<br>${q[1]}</p><small>عنترة بن شدّاد</small><em>${q[2]}</em></div>`).join('')}
+$('#dv').innerHTML=P.map(q=>`<div class="poem"><p>${q[0]}<br>${q[1]}</p><small>${q[2]}</small><em>${q[3]}</em></div>`).join('')+A.map(q=>`<div class="poem d"><p>${q[0]}<br>${q[1]}</p><small>عنترة بن شدّاد</small><em>${q[2]}</em></div>`).join('')}
 const inp=$('#sid');let cf='',tk='',busy=false,DATA=[];
 inp.addEventListener('paste',e=>{e.preventDefault();inp.value=pick((e.clipboardData||window.clipboardData).getData('text'))});
 inp.addEventListener('input',()=>{inp.value=dg(inp.value).replace(/\D/g,'').slice(0,12)});
 inp.addEventListener('keydown',e=>{if(e.key==='Enter')go()});
-$('#pb').onclick=async()=>{try{const v=pick(await navigator.clipboard.readText());if(!v)return showErr('لا يوجد رقم في الحافظة. انسخ رقمك الجامعي أولاً.');inp.value=v;go()}catch(e){showErr('تعذّر اللصق التلقائي. اضغط مطولاً على الخانة واختر لصق.');inp.focus()}};
+$('#pb').onclick=async()=>{try{const v=pick(await navigator.clipboard.readText());if(!v)return showErr('لا يوجد رقم في الحافظة.');inp.value=v;go()}catch(e){showErr('تعذّر اللصق التلقائي، اضغط مطولاً على الخانة واختر لصق.');inp.focus()}};
 $('#go').onclick=go;const showErr=m=>{const e=$('#err');e.textContent=m;e.style.display=m?'block':'none'};
 fetch('/api/config').then(r=>r.json()).then(c=>{if(c.turnstile){tk=c.turnstile;const s=document.createElement('script');s.src='https://challenges.cloudflare.com/turnstile/v0/api.js?onload=tsReady';s.async=true;document.head.appendChild(s)}});
 window.tsReady=()=>turnstile.render('#cf',{sitekey:tk,callback:t=>cf=t});
@@ -84,34 +81,32 @@ async function go(){if(busy)return;showErr('');const id=inp.value;if(!id)return 
  try{const r=await fetch('/api/result',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,cf})});const d=await r.json().catch(()=>({}));
   if(!r.ok)showErr(d.error||'حدث خطأ، حاول مرة أخرى.');else{DATA=d.results;show(0);$('#out').scrollIntoView({behavior:'smooth'})}}
  catch(e){showErr('تعذّر الاتصال بالخادم.')}
- if(window.turnstile)turnstile.reset();cf='';busy=false;b.disabled=false;b.textContent='🔎 فحص النتيجة'}
+ if(window.turnstile)turnstile.reset();cf='';busy=false;b.disabled=false;b.textContent='فحص النتيجة'}
 function show(i){window.CUR=DATA[i];$('#out').innerHTML=(DATA.length>1?`<div class="tabs">${DATA.map((r,j)=>`<button class="${j==i?'on':''}" onclick="show(${j})">${esc(r.label)}</button>`).join('')}</div>`:'')+render(DATA[i])}
 const num=x=>parseFloat(x);
 function render(r){const s=r.student,g=r.general,sm=k=>s.summary.find(x=>x.key===k&&x.value);
- let h=`<div class="card"><span class="mut">${esc(r.label)}</span><img class="nm" src="${r.name_img}" onload="fit(this,2.6)" alt="الاسم"><span class="mut">الرقم الجامعي: <b dir="ltr">${esc(s.id)}</b></span> ${r.note_img?`<img class="nm" src="${r.note_img}" onload="fit(this,2.1)" alt="">`:s.notes?`<span class="chip ${/ملحق|رسوب/.test(s.notes)?'no':''}">${esc(s.notes)}</span>`:''}</div>`;
- if(s.no_result)h+=`<div class="blocked">⚠️ ربما تم حجب نتيجتك من قبل الإدارة.<br>تواصل مع ليدر الدفعة أو إدارة الجامعة.</div>`;
+ let h=`<div class="id"><div class="mut">${esc(r.label)}</div><img class="im" src="${r.name_img}" onload="fit(this,2.6)" alt="الاسم"><div class="mut">الرقم الجامعي <b dir="ltr" style="color:var(--ink)">${esc(s.id)}</b></div>${r.note_img?`<img class="im" style="margin-top:8px" src="${r.note_img}" onload="fit(this,2.1)" alt="">`:s.notes?`<span class="chip ${/ملحق|رسوب/.test(s.notes)?'no':''}">${esc(s.notes)}</span>`:''}</div>`;
+ if(s.no_result)h+=`<div class="blocked">ربما تم حجب نتيجتك من قبل الإدارة.<br>تواصل مع ليدر الدفعة أو إدارة الجامعة.</div>`;
  else{
-  if(r.rank)h+=`<div class="rank">${['🥇','🥈','🥉'][r.rank.n-1]} ترتيبك ${ORD[r.rank.n]} على الدفعة${r.rank.tie?' (مركز مشترك)':''}<small>ترتيب غير رسمي محسوب من معدل الفصل المطبوع في الكشف</small></div>`;
+  if(r.rank)h+=`<div class="rank">${['🥇','🥈','🥉'][r.rank.n-1]} ترتيبك ${ORD[r.rank.n]} على الدفعة${r.rank.tie?' (مركز مشترك)':''}<small>ترتيب غير رسمي محسوب من معدل الفصل المطبوع</small></div>`;
   const a=sm('sem_gpa'),c=sm('cum_gpa'),big=[a,c].filter(Boolean);
-  h+=`<div class="card"><h3>📊 المعدلات</h3>${big.length?`<div class="kpi">${big.map(x=>`<div class="k"><small>${esc(x.meaning||x.label)}</small><b>${esc(x.value)}</b></div>`).join('')}</div>`:''}<div class="mini">${s.summary.filter(x=>x.value&&x!==a&&x!==c).map(x=>`<div><small>${esc(x.meaning||x.label)}</small><b>${esc(x.value)}</b></div>`).join('')}</div></div>`;
-  h+=`<div class="card"><h3>📚 المقررات والتقديرات</h3>${s.courses.map(c=>`<div class="course"><div class="ci">${r.course_imgs[c.no]?`<img src="${r.course_imgs[c.no]}" onload="fit(this,2.1)" alt="">`:`<b style="font-size:1.1rem">${esc(c.name)}</b><br>`}<small dir="ltr">${esc(c.code)}</small> <small>· ${esc(c.hours)} ساعات</small></div><div class="b ${gc(c.grade)}">${esc(c.grade||'—')}<small>${c.grade?esc(c.points):'لم تُرصد'}</small></div></div>`).join('')}</div>`;
+  h+=`<div class="box">${big.length?`<div class="kpi">${big.map(x=>`<div class="k"><b>${esc(x.value)}</b><small>${esc(x.meaning||x.label)}</small></div>`).join('')}</div>`:''}<div class="mini">${s.summary.filter(x=>x.value&&x!==a&&x!==c).map(x=>`<span>${esc(x.meaning||x.label)} <b>${esc(x.value)}</b></span>`).join('')}</div></div>`;
+  h+=`<div class="box"><h3>المقررات</h3>${s.courses.map(c=>`<div class="course"><div class="ci">${r.course_imgs[c.no]?`<img class="im" src="${r.course_imgs[c.no]}" onload="fit(this,2.1)" alt="">`:`<div class="nm">${esc(c.name)}</div>`}<small dir="ltr">${esc(c.code)}</small> <small>· ${esc(c.hours)} ساعات</small></div><div class="g ${gc(c.grade)}">${esc(c.grade||'—')}<small>${c.grade?esc(c.points):'لم تُرصد'}</small></div></div>`).join('')}</div>`;
   h+=calc(r)}
- h+=`<div class="card acts"><a class="btn a1" href="${r.links['student.pdf']}"><span style="font-size:1.5rem">📄</span><span>تنزيل نتيجتي مقصوصة من الأصل<small>صفك مع عناوين الجدول فقط</small></span></a><a class="btn a2" href="${r.links['general.pdf']}"><span style="font-size:1.5rem">🏛️</span><span>تنزيل نتيجتي مع الأختام والمعلومات<small>الكشف الكامل بدون نتائج زملائك</small></span></a></div>`;
- h+=`<div class="card"><details><summary>🔍 تحقق من صفك في الملف الرسمي</summary><div class="mut" style="margin-top:6px">صورة مقصوصة مباشرة من الملف الأصلي (مرّرها يميناً ويساراً).</div><div class="imgbox"><img src="${r.row_img}" alt=""></div><div class="sha">SHA-256: ${esc(r.source.sha256)}</div></details></div>`;
- h+=`<div class="card"><details><summary>ℹ️ سلم التقديرات</summary><table style="margin-top:8px">${Object.entries(g.scale).filter(([k])=>['A+','A','B+','B','C+','C','F'].includes(k)).map(([k,v])=>`<tr><td><b dir="ltr">${esc(k)}</b></td><td>${esc(v)} نقطة</td></tr>`).join('')}</table></details></div>`;
+ h+=`<div class="acts"><a class="btn p1" href="${r.links['student.pdf']}">تنزيل نتيجتي مقصوصة من الأصل<small>صفك مع عناوين الجدول فقط</small></a><a class="btn p2" href="${r.links['general.pdf']}">تنزيل نتيجتي مع الأختام والمعلومات<small>الكشف الكامل بدون نتائج زملائك</small></a></div>`;
+ h+=`<div class="box"><details><summary>تحقق من صفك في الملف الرسمي</summary><div class="mut" style="margin-top:6px">صورة مقصوصة مباشرة من الملف الأصلي. مرّرها يميناً ويساراً.</div><div class="imgbox"><img src="${r.row_img}" alt=""></div><div class="sha">SHA-256: ${esc(r.source.sha256)}</div></details>
+ <details><summary>سلم التقديرات</summary><table>${Object.entries(g.scale).filter(([k])=>['A+','A','B+','B','C+','C','F'].includes(k)).map(([k,v])=>`<tr><td><b dir="ltr">${esc(k)}</b></td><td>${esc(v)} نقطة</td></tr>`).join('')}</table>${g.meta.scale_source?'<div class="note">هذا السلم غير مكتوب في الكشف، وهو مأخوذ من كشف سابق.</div>':''}</details></div>`;
  return h}
 function calc(r){const s=r.student,sc=r.general.scale,cs=s.courses.filter(c=>c.grade&&num(c.hours)&&sc[c.grade]!==undefined);if(!cs.length)return'';
  let H=0,Q=0;const rows=cs.map(c=>{const p=num(sc[c.grade]),hh=num(c.hours);H+=hh;Q+=hh*p;return`<tr><td dir="ltr">${esc(c.code)}</td><td>${hh}</td><td>${p.toFixed(2)}</td><td>${(hh*p).toFixed(2)}</td></tr>`}).join('');
- const printed=s.summary.find(x=>x.key==='sem_gpa'),calcv=Q/H,ok=printed&&Math.abs(calcv-num(printed.value))<=0.011;
- const ntt=s.summary.find(x=>x.key==='cum_pts'&&x.value),stt=s.summary.find(x=>x.key==='cum_hrs'&&x.value);
- return`<div class="card"><details><summary>🧮 كيف حُسب معدلك؟ وجرّب حاسبة المعدل</summary>
- <p class="mut">المعدل = مجموع (نقاط التقدير × ساعات المقرر) ÷ مجموع الساعات.</p>
- <div style="overflow-x:auto"><table><thead><tr><th>المقرر</th><th>الساعات</th><th>نقاط التقدير</th><th>الساعات × النقاط</th></tr></thead><tbody>${rows}</tbody><tfoot><tr><td>المجموع</td><td>${H}</td><td></td><td>${Q.toFixed(2)}</td></tr></tfoot></table></div>
- <div class="res">${Q.toFixed(2)} ÷ ${H} = ${calcv.toFixed(2)}</div>
- <div class="note">${ok?'✅ يطابق معدل الفصل الرسمي في الكشف.':`ℹ️ قد يختلف هذا الحساب عن المطبوع (${printed?esc(printed.value):'—'}) لأسباب لا تظهر في الجدول مثل مواد غير محتسبة أو معادَلة. <b>المعتمد دائماً هو الرقم الرسمي في الكشف.</b>`}</div>
- ${ntt&&stt?`<h3 style="margin-top:16px">🎯 حاسبة المعدل التراكمي القادم</h3><div class="mut">أضف المواد والتقديرات المتوقعة لتعرف معدلك التراكمي التقريبي.</div><div id="wi"></div><button class="add" onclick="addW()">＋ إضافة مادة</button><div class="res" id="wr">—</div>`:''}</details></div>`}
-function addW(){const sc=CUR.general.scale,g=['A+','A','B+','B','C+','C','F'].filter(k=>sc[k]!==undefined);const d=document.createElement('div');d.className='wr';
- d.innerHTML=`<select onchange="calcW()">${[1,2,3,4,5,6].map(n=>`<option ${n==3?'selected':''} value="${n}">${n} ساعات</option>`).join('')}</select><select onchange="calcW()">${g.map(k=>`<option value="${sc[k]}">${k}</option>`).join('')}</select><button class="sec" onclick="this.parentNode.remove();calcW()">✕</button>`;$('#wi').appendChild(d);calcW()}
+ const printed=s.summary.find(x=>x.key==='sem_gpa'&&x.value),ok=printed&&Math.abs(Q/H-num(printed.value))<=0.011,ntt=s.summary.find(x=>x.key==='cum_pts'&&x.value),stt=s.summary.find(x=>x.key==='cum_hrs'&&x.value);
+ return`<div class="box"><details style="border:0;padding:0"><summary>كيف حُسب معدلك؟ وحاسبة المعدل</summary><div class="mut" style="margin-top:6px">المعدل = مجموع (نقاط التقدير × ساعات المقرر) ÷ مجموع الساعات</div>
+ <div style="overflow-x:auto"><table><thead><tr><th>المقرر</th><th>الساعات</th><th>النقاط</th><th>الناتج</th></tr></thead><tbody>${rows}</tbody><tfoot><tr><td>المجموع</td><td>${H}</td><td></td><td>${Q.toFixed(2)}</td></tr></tfoot></table></div>
+ <div class="res">${Q.toFixed(2)} ÷ ${H} = ${(Q/H).toFixed(2)}</div>
+ <div class="note">${ok?'يطابق معدل الفصل الرسمي في الكشف.':`قد يختلف عن المطبوع${printed?' ('+esc(printed.value)+')':''} لأسباب لا تظهر في الجدول كمواد غير محتسبة. <b>المعتمد دائماً هو الرقم الرسمي.</b>`}</div>
+ ${ntt&&stt?`<h3 style="margin-top:18px">حاسبة المعدل التراكمي القادم</h3><div class="mut">أضف مواد وتقديرات متوقعة لتعرف معدلك التقريبي.</div><div id="wi"></div><button class="add" onclick="addW()">＋ إضافة مادة</button><div class="res" id="wr">—</div>`:''}</details></div>`}
+function addW(){const sc=CUR.general.scale,g=['A+','A','B+','B','C+','C','F'].filter(k=>sc[k]!==undefined),d=document.createElement('div');d.className='wr';
+ d.innerHTML=`<select onchange="calcW()">${[1,2,3,4,5,6].map(n=>`<option ${n==3?'selected':''} value="${n}">${n} ساعات</option>`).join('')}</select><select onchange="calcW()">${g.map(k=>`<option value="${sc[k]}">${k}</option>`).join('')}</select><button class="link" onclick="this.parentNode.remove();calcW()">حذف</button>`;$('#wi').appendChild(d);calcW()}
 function calcW(){const s=CUR.student,n=num(s.summary.find(x=>x.key==='cum_pts').value),h=num(s.summary.find(x=>x.key==='cum_hrs').value);let a=0,b=0;
  document.querySelectorAll('#wi .wr').forEach(w=>{const x=w.querySelectorAll('select');a+=num(x[0].value)*num(x[1].value);b+=num(x[0].value)});
  $('#wr').textContent=b?`${((n+a)/(h+b)).toFixed(2)}  (الآن ${(n/h).toFixed(2)})`:'—'}
