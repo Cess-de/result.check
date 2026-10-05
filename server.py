@@ -8,6 +8,8 @@ BASE = pathlib.Path(__file__).resolve().parent
 app = Flask(__name__, static_folder=None)
 DATA = pathlib.Path(os.environ.get('DATA_DIR', BASE / 'data'))
 LOCK = threading.Lock()          # pdfium is not thread-safe
+HEAVY = threading.Semaphore(1)   # one full-document PDF build at a time (keeps RAM under the 512 MB free-plan limit)
+COURSE_CACHE = {}                # course-name images are identical for everyone: render once
 NOTFOUND = 'لم يتم العثور على نتيجة لهذا الرقم الجامعي.'
 DIGITS = str.maketrans('٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹', '01234567890123456789')
 KNOWN = {'cum_pts': 'نقاط تراكمية', 'cum_hrs': 'ساعات تراكمية', 'cum_gpa': 'المعدل التراكمي', 'cum_gpa_prev_a': 'المعدل التراكمي الأسبق',
@@ -151,7 +153,9 @@ def headers(r):
     r.headers['X-Content-Type-Options'] = 'nosniff'
     r.headers['X-Robots-Tag'] = 'noindex, nofollow'
     r.headers['Referrer-Policy'] = 'no-referrer'
-    if request.path.startswith(('/api', '/dl', '/cell')):
+    if '/course/' in request.path:
+        r.headers['Cache-Control'] = 'public, max-age=86400'
+    elif request.path.startswith(('/api', '/dl', '/cell')):
         r.headers['Cache-Control'] = 'no-store'
     else:
         r.headers['Content-Security-Policy'] = ("default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; "
@@ -195,6 +199,10 @@ def api_result():
     return jsonify(results=out)
 
 
+def to_bytes(im):
+    b = io.BytesIO(); im.save(b, 'PNG', optimize=False); return b.getvalue()
+
+
 def png(im):
     b = io.BytesIO(); im.save(b, 'PNG'); b.seek(0)
     return send_file(b, mimetype='image/png')
@@ -218,8 +226,11 @@ def cell(ds, kind, key):
         c = d and d['j']['courses'].get(key)
         if not c or not c.get('name_box'):
             abort(404)
-        with LOCK:
-            return png(tight(d['src'].clip(c['name_box']['page'], c['name_box']['bbox'], pad=0, scale=4)))
+        k = (ds, key)
+        if k not in COURSE_CACHE:
+            with LOCK:
+                COURSE_CACHE[k] = to_bytes(tight(d['src'].clip(c['name_box']['page'], c['name_box']['bbox'], pad=0, scale=4)))
+        return send_file(io.BytesIO(COURSE_CACHE[k]), mimetype='image/png')
     d = guard(ds, key)
     rec = d['j']['students'][key]
     with LOCK:
@@ -237,9 +248,11 @@ def download(ds, sid, kind):
     d = guard(ds, sid)
     j = d['j']
     if kind == 'general.pdf':
-        with LOCK:
-            ims = general_with_student(d['src'], j['masks'], j['students'][sid])
-        b = io.BytesIO(); images_to_pdf(ims, 2.5, b); b.seek(0)
+        with HEAVY:
+            with LOCK:
+                ims = general_with_student(d['src'], j['masks'], j['students'][sid], scale=2)
+            b = io.BytesIO(); images_to_pdf(ims, 2, b); b.seek(0)
+            del ims
         return send_file(b, mimetype='application/pdf', as_attachment=True, download_name=f'{ds}_{sid}_stamps.pdf')
     if kind == 'student.pdf':
         rec = j['students'][sid]
