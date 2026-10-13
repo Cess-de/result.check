@@ -45,13 +45,13 @@ class Source:
             left=x0, bottom=H - b + inset, right=x1, top=H - t - inset)
 
 
-def images_to_pdf(images, scale, path_or_buf):
+def images_to_pdf(images, scale, path_or_buf, fmt='PNG', quality=85):
     c = canvas.Canvas(path_or_buf)
     for im in images:
         w, h = im.width / scale, im.height / scale
         c.setPageSize((w, h))
         buf = io.BytesIO()
-        im.save(buf, 'PNG')
+        im.save(buf, fmt, **({'quality': quality} if fmt == 'JPEG' else {}))
         buf.seek(0)
         c.drawImage(ImageReader(buf), 0, 0, w, h)
         c.showPage()
