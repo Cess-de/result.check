@@ -49,13 +49,14 @@ def ranks(j):
         return {}
     keys = {}
     for sid, r in j['students'].items():
-        if r['no_result'] or any(not r['cells'][i] or r['cells'][i] == 'F' for i in cc):
+        if r['no_result'] or any(not r['cells'][i] or r['cells'][i] in ('F', 'Abs.F') for i in cc):
             continue
         keys[sid] = (num(r, 'sem_gpa'), num(r, 'cum_gpa'), num(r, 'sem_pts'))
     return {sid: (1 + sum(k > v for k in keys.values()), sum(k == v for k in keys.values()) > 1) for sid, v in keys.items()}
 
 
 DS, INDEX = {}, collections.defaultdict(list)
+ENTRIES = []   # (digits of the index number, dataset, real index string)
 GROUPS = collections.defaultdict(dict)
 for f in sorted(DATA.iterdir()) if DATA.exists() else []:
     n = f.name
@@ -76,7 +77,7 @@ for key, g in GROUPS.items():
         name = re.sub(r'[^A-Za-z0-9_-]', '', g['json'].stem) or key
         DS[name] = dict(j=j, src=Source(g['pdf']), general=g['general'], rank=ranks(j))
         for sid in j['students']:
-            INDEX[sid].append(name)
+            ENTRIES.append((re.sub(r'\D', '', sid), name, sid))
         log(f'loaded "{name}": {len(j["students"])} students')
     except Exception as e:
         log(f'SKIPPED "{key}": {e!r}')
@@ -126,6 +127,22 @@ def captcha_ok(token, addr):
 
 
 # ---------- views ----------
+# Students may type the full index number (EN-22-11061221 -> 2211061221) or just its last 8 digits.
+def build_index():
+    short = collections.Counter(d[-8:] for d, _, _ in ENTRIES if len(d) > 8)
+    for dg_, ds, real in ENTRIES:
+        INDEX[dg_].append((ds, real))
+        if len(dg_) > 8 and short[dg_[-8:]] == 1 and dg_[-8:] not in INDEX:
+            INDEX[dg_[-8:]].append((ds, real))
+
+
+build_index()
+
+
+def hdr(j, rec):
+    return j.get('headers', {}).get(str(rec['page'])) or j['header']
+
+
 def view(j, sid):
     rec = j['students'][sid]
     v = dict(id=sid, name='', summary=[], courses=[], notes='', no_result=rec['no_result'])
@@ -136,7 +153,7 @@ def view(j, sid):
         elif k == 'note': v['notes'] = val
         elif k == 'course':
             info = j['courses'].get(c['course_no'], {})
-            v['courses'].append(dict(no=c['course_no'], code=info.get('code', ''), name=info.get('name', ''),
+            v['courses'].append(dict(no=c['course_no'], code=info.get('code', ''), name=info.get('name', ''), name_ar=info.get('name_ar', ''),
                                      hours=info.get('hours', ''), grade=val,
                                      points=j['scale'].get(val, '')))
         elif k == 'summary':
@@ -148,7 +165,7 @@ def view(j, sid):
 
 def general(j):
     return dict(meta={k: v for k, v in j['meta'].items()}, courses=[{k: v for k, v in c.items() if k != 'name_box'}
-                for c in j['courses'].values()], distribution=j['distribution'], abbr=j['abbr'], scale=j['scale'])
+                for c in j['courses'].values()], distribution=j['distribution'], abbr=j['abbr'], scale=j['scale'], scale_info=j.get('scale_info'))
 
 
 def links(ds, sid):
@@ -189,18 +206,18 @@ def api_result():
     body = request.get_json(silent=True) or {}
     if not captcha_ok(body.get('cf'), a):
         return jsonify(error='فشل التحقق الأمني، أعد المحاولة.'), 400
-    sid = str(body.get('id', '')).strip().translate(DIGITS)
+    sid = re.sub(r'\D', '', str(body.get('id', '')).translate(DIGITS))   # EN-22-11061221 -> 2211061221
     if not re.fullmatch(r'\d{3,12}', sid) or sid not in INDEX:
         FAIL[a].append(time.time())
         return jsonify(error=NOTFOUND), 404
     out = []
-    for ds in INDEX[sid]:
+    for ds, sid in INDEX[sid]:
         j = DS[ds]['j']
         rk = DS[ds]['rank'].get(sid)   # only ranks 1-3 are ever sent to the client
         out.append(dict(dataset=ds, label=j['meta']['label'], student=view(j, sid),
                         rank=dict(n=rk[0], tie=rk[1]) if rk and rk[0] <= 3 else None, general=general(j),
                         source=dict(file=j['meta']['source_pdf'], sha256=j['meta']['sha256']), links=links(ds, sid),
-                        name_img=f'/cell/{ds}/name/{sid}.png',
+                        name_img=f'/cell/{ds}/name/{sid}.png' if j['students'][sid].get('name_box') else None,
                         note_img=f'/cell/{ds}/note/{sid}.png' if j['students'][sid].get('note_box') else None, row_img=f'/cell/{ds}/row/{sid}.png',
                         course_imgs={c['no']: f'/cell/{ds}/course/{c["no"]}.png' for c in j['courses'].values() if c.get('name_box')}))
     return jsonify(results=out)
@@ -248,7 +265,7 @@ def cell(ds, kind, key):
             elif kind == 'note' and rec.get('note_box'):
                 im = tight(d['src'].clip(rec['note_box']['page'], rec['note_box']['bbox'], pad=0, scale=4))
             elif kind == 'row':
-                im = student_image(d['src'], d['j']['header'], rec, '', scale=3)
+                im = student_image(d['src'], hdr(d['j'], rec), rec, '', scale=3)
             else:
                 abort(404)
             CELLS[ck] = to_bytes(im)
@@ -264,9 +281,8 @@ def download(ds, sid, kind):
     if kind == 'general.pdf':
         rec = j['students'][sid]
         with BASE_LOCK:
-            if 'base' not in d:
-                with LOCK:
-                    d['base'] = build_base(d['src'], j['masks'])
+            if 'base' not in d:   # the pre-masked pages written at ingest: nothing is rendered at request time
+                d['base'] = pathlib.Path(d['general']).read_bytes()
         with LOCK:
             row = d['src'].clip(rec['page'], rec['bbox'], pad=0.5, scale=3)
         with PDFGEN:
@@ -276,7 +292,7 @@ def download(ds, sid, kind):
         rec = j['students'][sid]
         foot = f'Source: {j["meta"]["source_pdf"]} | page {rec["page"] + 1} | SHA-256 {j["meta"]["sha256"]}'
         with LOCK:
-            im = student_image(d['src'], j['header'], rec, foot)
+            im = student_image(d['src'], hdr(j, rec), rec, foot)
         with PDFGEN:
             b = io.BytesIO(); images_to_pdf([im], S, b); b.seek(0)
         del im
