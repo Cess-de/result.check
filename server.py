@@ -1,5 +1,7 @@
 """Results server.  Run:  gunicorn server:app --workers 1 --threads 4
-Env: DATA_DIR (default data), TRUST_PROXY=1 behind a proxy, TURNSTILE_SITE_KEY / TURNSTILE_SECRET (optional CAPTCHA)."""
+Env: DATA_DIR (default data), TRUST_PROXY=1 behind a proxy, TURNSTILE_SITE_KEY / TURNSTILE_SECRET (optional CAPTCHA),
+     STRICT_SHA=1 (reject a dataset whose PDF hash differs from its JSON; default: only warn),
+     DIAG_KEY=<secret> (enables /api/diag?key=<secret> showing what was loaded / skipped and why)."""
 import collections, io, json, os, pathlib, re, threading, time
 from flask import Flask, jsonify, request, send_file, abort, Response
 from common import Source, sha256, student_image, images_to_pdf, S, tight, build_base, general_pdf
@@ -17,20 +19,45 @@ NOTFOUND = 'لم يتم العثور على نتيجة لهذا الرقم ال�
 DIGITS = str.maketrans('٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹', '01234567890123456789')
 KNOWN = {'cum_pts': 'نقاط تراكمية', 'cum_hrs': 'ساعات تراكمية', 'cum_gpa': 'المعدل التراكمي', 'cum_gpa_prev_a': 'المعدل التراكمي الأسبق',
          'cum_gpa_prev_b': 'المعدل التراكمي السابق', 'sem_pts': 'نقاط الفصل', 'sem_hrs': 'ساعات الفصل', 'sem_gpa': 'معدل الفصل'}
+STRICT_SHA = os.environ.get('STRICT_SHA') == '1'
 
 # ---------- load datasets ----------
 # Files are matched by a normalised name, so demo_s8 / demo-s8 / "demo_s8 (1)" still pair up.
-# A dataset that is incomplete or whose PDF does not match its JSON (sha256) is NEVER served; it is skipped
-# and reported in the log, and the rest of the site keeps working.
+# The "general" file may be named NAME.general.pdf, NAME_general.pdf, NAME-general.pdf or "NAME general.pdf".
+# Sub-folders of DATA are searched too. A dataset with a missing file is skipped and reported in the log
+# (and in /api/diag when DIAG_KEY is set); the rest of the site keeps working.
 import sys
+
+SKIPPED = []
 
 
 def norm(base):
-    return re.sub(r'[^a-z0-9]', '', re.sub(r'\(\d+\)', '', base.lower()))
+    return re.sub(r'[\W_]+', '', re.sub(r'\(\d+\)', '', base.lower()))
 
 
 def log(*a):
     print('[results]', *a, file=sys.stderr, flush=True)
+
+
+def skip(msg):
+    SKIPPED.append(msg)
+    log('SKIPPED', msg)
+
+
+def classify(n):
+    """-> (kind, base name) or None.  kind is json / pdf / general."""
+    low = n.lower()
+    if low.startswith('.'):
+        return None
+    if low.endswith('.json'):
+        return 'json', n[:-5]
+    if low.endswith('.pdf'):
+        stem = re.sub(r'\s*\(\d+\)$', '', n[:-4])
+        s2 = re.sub(r'[\s._-]+general$', '', stem, flags=re.I)
+        if s2 != stem and s2:
+            return 'general', s2
+        return 'pdf', stem
+    return None
 
 
 def ranks(j):
@@ -58,29 +85,32 @@ def ranks(j):
 DS, INDEX = {}, collections.defaultdict(list)
 ENTRIES = []   # (digits of the index number, dataset, real index string)
 GROUPS = collections.defaultdict(dict)
-for f in sorted(DATA.iterdir()) if DATA.exists() else []:
-    n = f.name
-    if n.lower().endswith('.general.pdf'): GROUPS[norm(n[:-12])]['general'] = f
-    elif n.lower().endswith('.pdf'): GROUPS[norm(n[:-4])]['pdf'] = f
-    elif n.lower().endswith('.json'): GROUPS[norm(n[:-5])]['json'] = f
-log('files in data:', sorted(x.name for x in DATA.iterdir()) if DATA.exists() else 'NO data FOLDER')
+FILES = sorted(p for p in DATA.rglob('*') if p.is_file()) if DATA.exists() else []
+for f in FILES:
+    c = classify(f.name)
+    if c:
+        GROUPS[norm(c[1])][c[0]] = f
+log('data dir:', str(DATA.resolve()), '| exists:', DATA.exists())
+log('files in data:', [str(x.relative_to(DATA)) for x in FILES] if DATA.exists() else 'NO data FOLDER')
 for key, g in GROUPS.items():
     missing = [k for k in ('json', 'pdf', 'general') if k not in g]
     if missing:
-        log(f'SKIPPED "{key}": missing {missing}. Needs 3 files: NAME.json, NAME.pdf, NAME.general.pdf')
+        skip(f'"{key}": missing {missing}. Needs 3 files: NAME.json, NAME.pdf, NAME.general.pdf (found: {sorted(k for k in g)})')
         continue
     try:
         j = json.loads(g['json'].read_text('utf-8'))
         if sha256(g['pdf']) != j['meta']['sha256']:
-            log(f'SKIPPED "{key}": the PDF does not match its JSON (sha256)')
-            continue
+            if STRICT_SHA:
+                skip(f'"{key}": the PDF does not match its JSON (sha256)')
+                continue
+            log(f'WARNING "{key}": the PDF does not match its JSON (sha256) - serving anyway; crops may be wrong if the PDF is a different file')
         name = re.sub(r'[^A-Za-z0-9_-]', '', g['json'].stem) or key
         DS[name] = dict(j=j, src=Source(g['pdf']), general=g['general'], rank=ranks(j))
         for sid in j['students']:
             ENTRIES.append((re.sub(r'\D', '', sid), name, sid))
         log(f'loaded "{name}": {len(j["students"])} students')
     except Exception as e:
-        log(f'SKIPPED "{key}": {e!r}')
+        skip(f'"{key}": {e!r}')
 
 # ---------- abuse protection ----------
 REQ, DLQ, FAIL = (collections.defaultdict(collections.deque) for _ in range(3))
@@ -196,6 +226,18 @@ def index():
 @app.get('/api/config')
 def config():
     return jsonify(turnstile=os.environ.get('TURNSTILE_SITE_KEY', ''))
+
+
+@app.get('/api/diag')
+def diag():
+    k = os.environ.get('DIAG_KEY')
+    if not k or request.args.get('key') != k:
+        abort(404)
+    return jsonify(data_dir=str(DATA.resolve()), exists=DATA.exists(),
+                   files=[str(x.relative_to(DATA)) for x in FILES],
+                   loaded={n: len(d['j']['students']) for n, d in DS.items()},
+                   skipped=SKIPPED,
+                   sample_ids={n: list(d['j']['students'])[:3] for n, d in DS.items()})
 
 
 @app.post('/api/result')
