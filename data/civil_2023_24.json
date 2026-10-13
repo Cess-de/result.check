@@ -1,0 +1,1723 @@
+{
+ "meta": {
+  "program": "civil_2023_24",
+  "term": "y1",
+  "label": "الهندسة المدنية - السنة الأولى (دفعتا 2023 و2024)",
+  "source_pdf": "civil_2023_24.pdf",
+  "sha256": "d86aac9b06c3c77d07187503d6113f2d448d2022fb662f31d8def694a504b0e5",
+  "pages": 3,
+  "students": 38,
+  "forced": false,
+  "original_sha256": "0aee811079513445f24fe555170f5bdf8622255eaecd5c31076fb8aa0141d824",
+  "scan_deskew_degrees": {
+   "1": -0.49,
+   "2": -0.08
+  },
+  "scale_source": "printed on page 1 of the scan (typed)",
+  "courses_source": "typed from page 1 of the scan"
+ },
+ "columns": [
+  {
+   "idx": 0,
+   "label": "S.No.",
+   "kind": "index"
+  },
+  {
+   "idx": 1,
+   "label": "Index No",
+   "kind": "id"
+  },
+  {
+   "idx": 2,
+   "label": "Student Name",
+   "kind": "name"
+  },
+  {
+   "idx": 3,
+   "label": "1",
+   "kind": "course",
+   "course_no": "1"
+  },
+  {
+   "idx": 4,
+   "label": "2",
+   "kind": "course",
+   "course_no": "2"
+  },
+  {
+   "idx": 5,
+   "label": "3",
+   "kind": "course",
+   "course_no": "3"
+  },
+  {
+   "idx": 6,
+   "label": "4",
+   "kind": "course",
+   "course_no": "4"
+  },
+  {
+   "idx": 7,
+   "label": "5",
+   "kind": "course",
+   "course_no": "5"
+  },
+  {
+   "idx": 8,
+   "label": "6",
+   "kind": "course",
+   "course_no": "6"
+  },
+  {
+   "idx": 9,
+   "label": "7",
+   "kind": "course",
+   "course_no": "7"
+  },
+  {
+   "idx": 10,
+   "label": "8",
+   "kind": "course",
+   "course_no": "8"
+  },
+  {
+   "idx": 11,
+   "label": "9",
+   "kind": "course",
+   "course_no": "9"
+  },
+  {
+   "idx": 12,
+   "label": "10",
+   "kind": "course",
+   "course_no": "10"
+  },
+  {
+   "idx": 13,
+   "label": "11",
+   "kind": "course",
+   "course_no": "11"
+  },
+  {
+   "idx": 14,
+   "label": "12",
+   "kind": "course",
+   "course_no": "12"
+  },
+  {
+   "idx": 15,
+   "label": "13",
+   "kind": "course",
+   "course_no": "13"
+  },
+  {
+   "idx": 16,
+   "label": "14",
+   "kind": "course",
+   "course_no": "14"
+  },
+  {
+   "idx": 17,
+   "label": "CH",
+   "kind": "summary",
+   "key": "sem_hrs"
+  },
+  {
+   "idx": 18,
+   "label": "GP",
+   "kind": "summary",
+   "key": "sem_pts"
+  },
+  {
+   "idx": 19,
+   "label": "GPA",
+   "kind": "summary",
+   "key": "sem_gpa"
+  },
+  {
+   "idx": 20,
+   "label": "CGPA",
+   "kind": "summary",
+   "key": "cum_gpa"
+  },
+  {
+   "idx": 21,
+   "label": "Remarks",
+   "kind": "note"
+  }
+ ],
+ "header": {
+  "page": 1,
+  "bbox": [
+   85.33333333333333,
+   155.0,
+   798.0,
+   191.33333333333334
+  ]
+ },
+ "headers": {
+  "1": {
+   "page": 1,
+   "bbox": [
+    85.33333333333333,
+    155.0,
+    798.0,
+    191.33333333333334
+   ]
+  },
+  "2": {
+   "page": 2,
+   "bbox": [
+    90.66666666666667,
+    169.0,
+    809.3333333333334,
+    198.0
+   ]
+  }
+ },
+ "students": {
+  "EN-22-11061221": {
+   "cells": [
+    "1",
+    "EN-22-11061221",
+    "Shazliya Abdullah Abdulmajid Musa",
+    "B+",
+    "B",
+    "B+",
+    "C+",
+    "C+",
+    "D",
+    "C+",
+    "B+",
+    "D",
+    "B",
+    "A",
+    "C+",
+    "C",
+    "A",
+    "34",
+    "91.5",
+    "2.69",
+    "2.69",
+    "Pas"
+   ],
+   "page": 1,
+   "bbox": [
+    85.33333333333333,
+    192.33333333333334,
+    798.0,
+    205.66666666666666
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-22-11116031": {
+   "cells": [
+    "2",
+    "EN-22-11116031",
+    "Hatem Issa Moussa Mohammed",
+    "B+",
+    "B",
+    "A",
+    "B",
+    "B+",
+    "C",
+    "B+",
+    "A",
+    "B",
+    "A",
+    "A",
+    "B+",
+    "B+",
+    "A",
+    "34",
+    "116.5",
+    "3.43",
+    "3.43",
+    "Pas"
+   ],
+   "page": 1,
+   "bbox": [
+    85.33333333333333,
+    206.66666666666666,
+    798.0,
+    219.66666666666666
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-22-11163234": {
+   "cells": [
+    "3",
+    "EN-22-11163234",
+    "Muhammad al-Azam Adam Abdullah Muhammad",
+    "B+",
+    "B",
+    "B+",
+    "C+",
+    "B+",
+    "F",
+    "B",
+    "A",
+    "B",
+    "B",
+    "A",
+    "B",
+    "B",
+    "A",
+    "34",
+    "101.5",
+    "2.99",
+    "2.99",
+    "Sup 1F"
+   ],
+   "page": 1,
+   "bbox": [
+    85.33333333333333,
+    220.66666666666666,
+    798.0,
+    233.66666666666666
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-22-11169452": {
+   "cells": [
+    "4",
+    "EN-22-11169452",
+    "Idris Musa Muhammad Alna",
+    "B+",
+    "A",
+    "B+",
+    "B+",
+    "B+",
+    "C",
+    "A",
+    "A",
+    "B",
+    "A",
+    "A",
+    "B+",
+    "B+",
+    "A",
+    "34",
+    "120.5",
+    "3.54",
+    "3.54",
+    "Pas"
+   ],
+   "page": 1,
+   "bbox": [
+    85.33333333333333,
+    234.66666666666666,
+    798.0,
+    247.66666666666666
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-22-11185265": {
+   "cells": [
+    "5",
+    "EN-22-11185265",
+    "Anas Babiker Adam Fadlallah",
+    "B",
+    "C",
+    "B+",
+    "D",
+    "C+",
+    "C",
+    "F",
+    "A",
+    "D",
+    "B",
+    "sub",
+    "B",
+    "B",
+    "A",
+    "32",
+    "77.0",
+    "2.41",
+    "2.41",
+    "Sup 1F, 1 Sub"
+   ],
+   "page": 1,
+   "bbox": [
+    85.33333333333333,
+    248.66666666666666,
+    798.0,
+    261.3333333333333
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-22-11225515": {
+   "cells": [
+    "6",
+    "EN-22-11225515",
+    "Muzammil Muhammad Ahmad Awad Al-Karim",
+    "B+",
+    "B",
+    "A",
+    "C+",
+    "C",
+    "D",
+    "C+",
+    "B+",
+    "B+",
+    "B+",
+    "A",
+    "D",
+    "B",
+    "B+",
+    "34",
+    "94.5",
+    "2.78",
+    "2.78",
+    "Pas"
+   ],
+   "page": 1,
+   "bbox": [
+    85.33333333333333,
+    262.3333333333333,
+    798.0,
+    275.3333333333333
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-22-11232414": {
+   "cells": [
+    "7",
+    "EN-22-11232414",
+    "Awab Al-Mu'taz Muhammad Salem",
+    "B+",
+    "D",
+    "B+",
+    "D",
+    "B+",
+    "D",
+    "F",
+    "B+",
+    "B+",
+    "C+",
+    "A",
+    "B",
+    "B",
+    "A",
+    "34",
+    "86.0",
+    "2.53",
+    "2.53",
+    "Sup 1F"
+   ],
+   "page": 1,
+   "bbox": [
+    85.33333333333333,
+    276.3333333333333,
+    798.0,
+    289.0
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-22-11272953": {
+   "cells": [
+    "8",
+    "EN-22-11272953",
+    "Siddeig Mohammed Suleiman Hassan",
+    "A",
+    "C",
+    "B+",
+    "D",
+    "A",
+    "D",
+    "C",
+    "B+",
+    "B+",
+    "B+",
+    "A",
+    "F",
+    "C+",
+    "A",
+    "34",
+    "87.5",
+    "2.57",
+    "2.57",
+    "Sup 1F"
+   ],
+   "page": 1,
+   "bbox": [
+    85.33333333333333,
+    290.0,
+    798.0,
+    302.6666666666667
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-22-11297873": {
+   "cells": [
+    "9",
+    "EN-22-11297873",
+    "Ahmed Hassan Muawlya Muhammad Al-Amin",
+    "B+",
+    "F",
+    "B+",
+    "D",
+    "C",
+    "F",
+    "F",
+    "A",
+    "C+",
+    "C",
+    "A",
+    "C+",
+    "Abs.F",
+    "B+",
+    "34",
+    "64.0",
+    "1.88",
+    "1.88",
+    "Sup 4F"
+   ],
+   "page": 1,
+   "bbox": [
+    85.33333333333333,
+    303.6666666666667,
+    798.0,
+    316.0
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-22-11300264": {
+   "cells": [
+    "10",
+    "EN-22-11300264",
+    "Mohammed Othman Mohammed Al-Sheikh",
+    "A",
+    "B",
+    "B+",
+    "B",
+    "C+",
+    "B",
+    "C+",
+    "A",
+    "A",
+    "A",
+    "B+",
+    "B+",
+    "A",
+    "A",
+    "34",
+    "117.0",
+    "3.44",
+    "3.44",
+    "Pas"
+   ],
+   "page": 1,
+   "bbox": [
+    85.33333333333333,
+    317.0,
+    798.0,
+    329.6666666666667
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-22-11328107": {
+   "cells": [
+    "11",
+    "EN-22-11328107",
+    "Muhammad Izz al-Din Hassan al-Ubaid",
+    "B",
+    "D",
+    "B+",
+    "D",
+    "sub",
+    "D",
+    "F",
+    "B+",
+    "A",
+    "D",
+    "sub",
+    "B",
+    "B",
+    "B+",
+    "30",
+    "66.5",
+    "2.22",
+    "2.22",
+    "Sup 1F, 2 Sub"
+   ],
+   "page": 1,
+   "bbox": [
+    85.33333333333333,
+    330.6666666666667,
+    798.0,
+    343.3333333333333
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-22-11360473": {
+   "cells": [
+    "12",
+    "EN-22-11360473",
+    "Ahmed Hussein Ahmed Ali",
+    "B+",
+    "A",
+    "B+",
+    "C+",
+    "C+",
+    "C+",
+    "B+",
+    "A",
+    "B",
+    "A",
+    "A",
+    "B+",
+    "B+",
+    "A",
+    "34",
+    "115.5",
+    "3.40",
+    "3.40",
+    "Pas"
+   ],
+   "page": 1,
+   "bbox": [
+    85.33333333333333,
+    344.3333333333333,
+    798.0,
+    357.6666666666667
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-22-11362825": {
+   "cells": [
+    "13",
+    "EN-22-11362825",
+    "Ali Ahmed Ali Al-Radhi",
+    "B",
+    "D",
+    "A",
+    "D",
+    "B+",
+    "D",
+    "C+",
+    "B+",
+    "D",
+    "C+",
+    "A",
+    "D",
+    "D",
+    "A",
+    "34",
+    "76.5",
+    "2.25",
+    "2.25",
+    "Pas"
+   ],
+   "page": 1,
+   "bbox": [
+    85.33333333333333,
+    358.6666666666667,
+    798.0,
+    371.6666666666667
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-22-11428041": {
+   "cells": [
+    "14",
+    "EN-22-11428041",
+    "Malaz Abdulmajid Yusuf Al-Hadi",
+    "B+",
+    "B+",
+    "B+",
+    "C",
+    "A",
+    "C",
+    "B",
+    "A",
+    "B+",
+    "A",
+    "A",
+    "A",
+    "B+",
+    "A",
+    "34",
+    "115.5",
+    "3.40",
+    "3.40",
+    "Pas"
+   ],
+   "page": 1,
+   "bbox": [
+    85.33333333333333,
+    372.6666666666667,
+    798.0,
+    385.6666666666667
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-22-11443546": {
+   "cells": [
+    "15",
+    "EN-22-11443546",
+    "Ismail Mahmoud Mohamed Ismail",
+    "B+",
+    "A",
+    "A",
+    "B+",
+    "A",
+    "B",
+    "A",
+    "A",
+    "B+",
+    "A",
+    "A",
+    "B+",
+    "B+",
+    "A",
+    "34",
+    "126.5",
+    "3.72",
+    "3.72",
+    "Pas"
+   ],
+   "page": 1,
+   "bbox": [
+    85.33333333333333,
+    386.6666666666667,
+    798.0,
+    399.6666666666667
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-22-11454641": {
+   "cells": [
+    "16",
+    "EN-22-11454641",
+    "Al-Mahdi Ali Ibrahim Ahmed",
+    "B",
+    "F",
+    "B",
+    "D",
+    "A",
+    "F",
+    "F",
+    "B+",
+    "C",
+    "D",
+    "sub",
+    "C",
+    "B",
+    "A",
+    "32",
+    "63.0",
+    "1.97",
+    "1.97",
+    "Sup 3F, 1 Sub"
+   ],
+   "page": 1,
+   "bbox": [
+    85.33333333333333,
+    400.6666666666667,
+    798.0,
+    413.3333333333333
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-23-11005966": {
+   "cells": [
+    "17",
+    "EN-23-11005966",
+    "Talha Majdi Khalafalla Abdeljabbar",
+    "B+",
+    "F",
+    "C+",
+    "C",
+    "B+",
+    "B",
+    "C",
+    "A",
+    "B",
+    "D",
+    "A",
+    "B+",
+    "B+",
+    "A",
+    "34",
+    "97.0",
+    "2.85",
+    "2.85",
+    "Sup 1F"
+   ],
+   "page": 1,
+   "bbox": [
+    85.33333333333333,
+    414.3333333333333,
+    798.0,
+    427.6666666666667
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-23-11008925": {
+   "cells": [
+    "18",
+    "EN-23-11008925",
+    "Abdelrahman Moatasem Hassan Hamad",
+    "B+",
+    "A",
+    "A",
+    "B",
+    "A",
+    "B",
+    "A",
+    "A",
+    "B",
+    "A",
+    "sub",
+    "B",
+    "B+",
+    "A",
+    "32",
+    "114.5",
+    "3.58",
+    "3.58",
+    "1 Sub"
+   ],
+   "page": 1,
+   "bbox": [
+    85.33333333333333,
+    428.6666666666667,
+    798.0,
+    441.6666666666667
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-23-11019930": {
+   "cells": [
+    "19",
+    "EN-23-11019930",
+    "Muhamad Omer Mohamed-Ahmed Abdelhakam",
+    "B",
+    "D",
+    "B+",
+    "D",
+    "B+",
+    "F",
+    "C",
+    "B+",
+    "D",
+    "D",
+    "A",
+    "B",
+    "B",
+    "A",
+    "34",
+    "80.0",
+    "2.35",
+    "2.35",
+    "Sup 1F"
+   ],
+   "page": 1,
+   "bbox": [
+    85.33333333333333,
+    442.6666666666667,
+    798.0,
+    455.6666666666667
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-23-11020153": {
+   "cells": [
+    "20",
+    "EN-23-11020153",
+    "Mohamed Mahdi Abdullah Mohamed",
+    "B+",
+    "A",
+    "A",
+    "B",
+    "A",
+    "B+",
+    "B+",
+    "A",
+    "B",
+    "A",
+    "A",
+    "B+",
+    "B+",
+    "A",
+    "34",
+    "124.0",
+    "3.65",
+    "3.65",
+    "Pas"
+   ],
+   "page": 1,
+   "bbox": [
+    85.33333333333333,
+    456.6666666666667,
+    798.0,
+    469.6666666666667
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-23-11028574": {
+   "cells": [
+    "21",
+    "EN-23-11028574",
+    "Mohamed Kamal Mohamed Ibrahim",
+    "B+",
+    "D",
+    "B",
+    "D",
+    "sub",
+    "B+",
+    "F",
+    "A",
+    "D",
+    "B",
+    "sub",
+    "B",
+    "B",
+    "A",
+    "30",
+    "74.5",
+    "2.48",
+    "2.48",
+    "Sup 1F, 2 Sub"
+   ],
+   "page": 2,
+   "bbox": [
+    90.66666666666667,
+    199.0,
+    809.3333333333334,
+    212.0
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-23-11036038": {
+   "cells": [
+    "22",
+    "EN-23-11036038",
+    "Bara'a Adel Madawi Abdelqadir",
+    "A",
+    "A",
+    "A",
+    "B",
+    "B+",
+    "B",
+    "B",
+    "A",
+    "B+",
+    "B+",
+    "A",
+    "B+",
+    "B",
+    "A",
+    "34",
+    "119.5",
+    "3.51",
+    "3.51",
+    "Pas"
+   ],
+   "page": 2,
+   "bbox": [
+    90.66666666666667,
+    213.0,
+    809.3333333333334,
+    227.0
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-23-11039882": {
+   "cells": [
+    "23",
+    "EN-23-11039882",
+    "Omer Ahmed Al-Amin Ahmed",
+    "B+",
+    "A",
+    "A",
+    "B",
+    "B+",
+    "D",
+    "C+",
+    "A",
+    "B",
+    "A",
+    "sub",
+    "B",
+    "B+",
+    "A",
+    "32",
+    "103.0",
+    "3.22",
+    "3.22",
+    "1 Sub"
+   ],
+   "page": 2,
+   "bbox": [
+    90.66666666666667,
+    228.0,
+    809.3333333333334,
+    241.33333333333334
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-23-11041913": {
+   "cells": [
+    "24",
+    "EN-23-11041913",
+    "Alaa Eldin Najm Eldin Fadl Hamdan",
+    "B+",
+    "B+",
+    "A",
+    "B",
+    "A",
+    "B+",
+    "D",
+    "A",
+    "C+",
+    "C+",
+    "A",
+    "B",
+    "B+",
+    "A",
+    "34",
+    "110.0",
+    "3.24",
+    "3.24",
+    "Pas"
+   ],
+   "page": 2,
+   "bbox": [
+    90.66666666666667,
+    242.33333333333334,
+    809.3333333333334,
+    256.0
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-23-11042296": {
+   "cells": [
+    "25",
+    "EN-23-11042296",
+    "Abdelmalik Fath Al-Rahman Suliman Al-Sebaie",
+    "A",
+    "A",
+    "A",
+    "B",
+    "B+",
+    "B",
+    "B",
+    "A",
+    "C",
+    "B+",
+    "sub",
+    "C",
+    "B",
+    "A",
+    "32",
+    "104.0",
+    "3.25",
+    "3.25",
+    "1 Sub"
+   ],
+   "page": 2,
+   "bbox": [
+    90.66666666666667,
+    257.0,
+    809.3333333333334,
+    270.3333333333333
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-23-11048089": {
+   "cells": [
+    "26",
+    "EN-23-11048089",
+    "Mohamed Abdelmahmoud Al-Tayeb Fadl Al-Seid",
+    "B+",
+    "A",
+    "A",
+    "C",
+    "A",
+    "B+",
+    "B+",
+    "A",
+    "B",
+    "A",
+    "A",
+    "B+",
+    "B+",
+    "A",
+    "34",
+    "121.0",
+    "3.56",
+    "3.56",
+    "Pas"
+   ],
+   "page": 2,
+   "bbox": [
+    90.66666666666667,
+    271.3333333333333,
+    809.3333333333334,
+    285.0
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-23-11050156": {
+   "cells": [
+    "27",
+    "EN-23-11050156",
+    "Samira Abdelmowla Abdelmottalib Abdelfadeel",
+    "B+",
+    "A",
+    "A",
+    "B",
+    "B+",
+    "B+",
+    "B+",
+    "B+",
+    "C",
+    "A",
+    "A",
+    "B+",
+    "B",
+    "A",
+    "34",
+    "118.5",
+    "3.49",
+    "3.49",
+    "Pas"
+   ],
+   "page": 2,
+   "bbox": [
+    90.66666666666667,
+    286.0,
+    809.3333333333334,
+    298.6666666666667
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-23-11053152": {
+   "cells": [
+    "28",
+    "EN-23-11053152",
+    "Tibyan Suliman Ahmed Suliman",
+    "B+",
+    "B+",
+    "A",
+    "B+",
+    "A",
+    "B+",
+    "B",
+    "A",
+    "B+",
+    "B+",
+    "A",
+    "A",
+    "B",
+    "A",
+    "34",
+    "123.0",
+    "3.62",
+    "3.62",
+    "Pas"
+   ],
+   "page": 2,
+   "bbox": [
+    90.66666666666667,
+    299.6666666666667,
+    809.3333333333334,
+    313.6666666666667
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-23-11058104": {
+   "cells": [
+    "29",
+    "EN-23-11058104",
+    "Ma'ab Ahmed Abakar Mohamed",
+    "Abs.F",
+    "B",
+    "A",
+    "C",
+    "A",
+    "D",
+    "B",
+    "B+",
+    "B",
+    "B",
+    "A",
+    "B+",
+    "B",
+    "B+",
+    "34",
+    "97.0",
+    "2.85",
+    "2.85",
+    "Sup 1F"
+   ],
+   "page": 2,
+   "bbox": [
+    90.66666666666667,
+    314.6666666666667,
+    809.3333333333334,
+    327.6666666666667
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-23-11059407": {
+   "cells": [
+    "30",
+    "EN-23-11059407",
+    "Budoor Abdullah Adam Ramadan",
+    "A",
+    "C",
+    "A",
+    "B",
+    "A",
+    "A",
+    "B",
+    "B+",
+    "C",
+    "B",
+    "A",
+    "A",
+    "B+",
+    "A",
+    "34",
+    "117.5",
+    "3.46",
+    "3.46",
+    "Pas"
+   ],
+   "page": 2,
+   "bbox": [
+    90.66666666666667,
+    328.6666666666667,
+    809.3333333333334,
+    343.0
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-23-11059772": {
+   "cells": [
+    "31",
+    "EN-23-11059772",
+    "Ammar Ahmed Abdelbaqi Mohamed",
+    "B+",
+    "B+",
+    "B+",
+    "D",
+    "B+",
+    "B+",
+    "F",
+    "A",
+    "C+",
+    "C+",
+    "sub",
+    "C",
+    "A",
+    "A",
+    "32",
+    "89.5",
+    "2.80",
+    "2.80",
+    "Sup 1F, 1 Sub"
+   ],
+   "page": 2,
+   "bbox": [
+    90.66666666666667,
+    344.0,
+    809.3333333333334,
+    356.6666666666667
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-23-11059856": {
+   "cells": [
+    "32",
+    "EN-23-11059856",
+    "Alaa Eldin Hussein Al-Zubeir Abdullah",
+    "B+",
+    "A",
+    "A",
+    "C",
+    "B+",
+    "B+",
+    "C+",
+    "A",
+    "C",
+    "B",
+    "A",
+    "D",
+    "B",
+    "A",
+    "34",
+    "104.0",
+    "3.06",
+    "3.06",
+    "Pas"
+   ],
+   "page": 2,
+   "bbox": [
+    90.66666666666667,
+    357.6666666666667,
+    809.3333333333334,
+    371.3333333333333
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-23-11060015": {
+   "cells": [
+    "33",
+    "EN-23-11060015",
+    "Awad El-Toom Mohamed El-Toom Al-Noor",
+    "B+",
+    "C",
+    "B",
+    "C",
+    "A",
+    "C",
+    "F",
+    "A",
+    "C+",
+    "B",
+    "sub",
+    "D",
+    "B+",
+    "B+",
+    "32",
+    "80.0",
+    "2.50",
+    "2.50",
+    "Sup 1F, 1 Sub"
+   ],
+   "page": 2,
+   "bbox": [
+    90.66666666666667,
+    372.3333333333333,
+    809.3333333333334,
+    386.0
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-23-11065089": {
+   "cells": [
+    "34",
+    "EN-23-11065089",
+    "Amin Abdelghani Saeed Abdullah",
+    "B+",
+    "D",
+    "B",
+    "B",
+    "A",
+    "B",
+    "B",
+    "A",
+    "C+",
+    "C",
+    "A",
+    "C+",
+    "B+",
+    "A",
+    "34",
+    "105.0",
+    "3.09",
+    "3.09",
+    "Pas"
+   ],
+   "page": 2,
+   "bbox": [
+    90.66666666666667,
+    387.0,
+    809.3333333333334,
+    400.6666666666667
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-23-11079832": {
+   "cells": [
+    "35",
+    "EN-23-11079832",
+    "Hamad El-Geili Hamad Matar",
+    "B+",
+    "B",
+    "B",
+    "A",
+    "B+",
+    "B+",
+    "C+",
+    "B+",
+    "D",
+    "D",
+    "A",
+    "B",
+    "B+",
+    "A",
+    "34",
+    "106.5",
+    "3.13",
+    "3.13",
+    "Pas"
+   ],
+   "page": 2,
+   "bbox": [
+    90.66666666666667,
+    401.6666666666667,
+    809.3333333333334,
+    415.0
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-23-11089358": {
+   "cells": [
+    "36",
+    "EN-23-11089358",
+    "Hamza Haroun Al-Noor Haroun",
+    "B+",
+    "A",
+    "A",
+    "D",
+    "A",
+    "C",
+    "B",
+    "B+",
+    "B",
+    "A",
+    "A",
+    "B+",
+    "B",
+    "A",
+    "34",
+    "109.5",
+    "3.22",
+    "3.22",
+    "Pas"
+   ],
+   "page": 2,
+   "bbox": [
+    90.66666666666667,
+    416.0,
+    809.3333333333334,
+    430.3333333333333
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-23-12000604": {
+   "cells": [
+    "37",
+    "EN-23-12000604",
+    "Musa Mohamed Khater Arabi",
+    "A",
+    "B+",
+    "B+",
+    "C",
+    "B+",
+    "D",
+    "C",
+    "A",
+    "B",
+    "B",
+    "A",
+    "B+",
+    "A",
+    "A",
+    "34",
+    "106.5",
+    "3.13",
+    "3.13",
+    "Pas"
+   ],
+   "page": 2,
+   "bbox": [
+    90.66666666666667,
+    431.3333333333333,
+    809.3333333333334,
+    444.3333333333333
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  },
+  "EN-23-21005423": {
+   "cells": [
+    "38",
+    "EN-23-21005423",
+    "Mahmoud Mohamed Al-Tayeb Bella",
+    "C+",
+    "B+",
+    "C",
+    "C",
+    "B+",
+    "B+",
+    "D",
+    "B+",
+    "D",
+    "D",
+    "A",
+    "B",
+    "B",
+    "B+",
+    "34",
+    "90.0",
+    "2.65",
+    "2.65",
+    "Pas"
+   ],
+   "page": 2,
+   "bbox": [
+    90.66666666666667,
+    445.3333333333333,
+    809.3333333333334,
+    459.0
+   ],
+   "no_result": false,
+   "name_box": null,
+   "note_box": null
+  }
+ },
+ "masks": [
+  {
+   "page": 1,
+   "bbox": [
+    85.33333333333333,
+    191.66666666666666,
+    798.0,
+    470.0
+   ]
+  },
+  {
+   "page": 2,
+   "bbox": [
+    90.66666666666667,
+    198.33333333333334,
+    809.3333333333334,
+    459.3333333333333
+   ]
+  }
+ ],
+ "courses": {
+  "1": {
+   "no": "1",
+   "code": "UTAL1101",
+   "name": "Arabic Language",
+   "name_ar": "اللغة العربية",
+   "hours": "2",
+   "name_box": null
+  },
+  "2": {
+   "no": "2",
+   "code": "UTEL1102",
+   "name": "English Language",
+   "name_ar": "اللغة الإنجليزية",
+   "hours": "2",
+   "name_box": null
+  },
+  "3": {
+   "no": "3",
+   "code": "UTUS1101",
+   "name": "University Study Skills",
+   "name_ar": "مهارات الدراسة الجامعية",
+   "hours": "2",
+   "name_box": null
+  },
+  "4": {
+   "no": "4",
+   "code": "ENCR1101",
+   "name": "Applied Chemistry",
+   "name_ar": "الكيمياء التطبيقية",
+   "hours": "3",
+   "name_box": null
+  },
+  "5": {
+   "no": "5",
+   "code": "ENCR1102",
+   "name": "Workshop Technology I",
+   "name_ar": "تقنية الورش 1",
+   "hours": "2",
+   "name_box": null
+  },
+  "6": {
+   "no": "6",
+   "code": "ENCE1101",
+   "name": "Applied Mathematics I",
+   "name_ar": "الرياضيات التطبيقية 1",
+   "hours": "3",
+   "name_box": null
+  },
+  "7": {
+   "no": "7",
+   "code": "ENCE1102",
+   "name": "Applied Physics",
+   "name_ar": "الفيزياء التطبيقية",
+   "hours": "3",
+   "name_box": null
+  },
+  "8": {
+   "no": "8",
+   "code": "UTCS1201",
+   "name": "Computer Skills",
+   "name_ar": "مهارات الحاسوب",
+   "hours": "2",
+   "name_box": null
+  },
+  "9": {
+   "no": "9",
+   "code": "UTSS1201",
+   "name": "Sudanese Studies",
+   "name_ar": "الدراسات السودانية",
+   "hours": "2",
+   "name_box": null
+  },
+  "10": {
+   "no": "10",
+   "code": "ENCR1201",
+   "name": "English for Engineering Purposes",
+   "name_ar": "اللغة الإنجليزية للأغراض الهندسية",
+   "hours": "2",
+   "name_box": null
+  },
+  "11": {
+   "no": "11",
+   "code": "ENCR1202",
+   "name": "Workshop Technology II",
+   "name_ar": "تقنية الورش 2",
+   "hours": "2",
+   "name_box": null
+  },
+  "12": {
+   "no": "12",
+   "code": "ENCR1203",
+   "name": "Engineering Drawing",
+   "name_ar": "الرسم الهندسي",
+   "hours": "3",
+   "name_box": null
+  },
+  "13": {
+   "no": "13",
+   "code": "ENCE1201",
+   "name": "Applied Mathematics II",
+   "name_ar": "الرياضيات التطبيقية 2",
+   "hours": "3",
+   "name_box": null
+  },
+  "14": {
+   "no": "14",
+   "code": "ENCE1202",
+   "name": "Civil Engineering Materials",
+   "name_ar": "مواد الهندسة المدنية",
+   "hours": "3",
+   "name_box": null
+  }
+ },
+ "distribution": null,
+ "abbr": {},
+ "scale": {
+  "A": "4.00",
+  "B+": "3.50",
+  "B": "3.00",
+  "C+": "2.50",
+  "C": "2.00",
+  "D": "1.00",
+  "F": "0.00"
+ },
+ "scale_info": {
+  "A": [
+   "≥ 80 %",
+   "Excellent"
+  ],
+  "B+": [
+   "70 - 79 %",
+   "Very Good"
+  ],
+  "B": [
+   "60 - 69 %",
+   "Good"
+  ],
+  "C+": [
+   "55 - 59 %",
+   "Pass"
+  ],
+  "C": [
+   "50 - 54 %",
+   "Pass"
+  ],
+  "D": [
+   "40 - 49 %",
+   "Con. Pass"
+  ],
+  "F": [
+   "< 40 %, Abs, Bar",
+   "Fail"
+  ]
+ }
+}
